@@ -1,0 +1,26 @@
+[
+    {
+        "sha256": "fecabdc949b6a39d32c0899fa2545eab25e63f2ed0a33c4ad1511426384d3070",
+        "target": "en.utf-8.spl",
+        "timestamp": "2024-07-24T11:10:40+02:00",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.utf-8.spl"
+    },
+    {
+        "sha256": "5b6e5e6165582d2fd7a1bfa41fbce8242c72476222c55d17c2aa2ba933c932ec",
+        "target": "en.utf-8.sug",
+        "timestamp": "2024-07-24T11:10:42+02:00",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.utf-8.sug"
+    },
+    {
+        "sha256": "73ed2845a1766ca21d5388fc766d926074a90a7ba9223458fc0d0dcecc72ab52",
+        "target": "sv.utf-8.spl",
+        "timestamp": "2024-07-24T11:10:42+02:00",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sv.utf-8.spl"
+    },
+    {
+        "sha256": "1eb132c400fc3903ad1353a6ccd2d62a1bd5179e9a0f14ea23e6681e6fd808eb",
+        "target": "sv.utf-8.sug",
+        "timestamp": "2024-07-24T11:10:43+02:00",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/sv.utf-8.sug"
+    }
+]
