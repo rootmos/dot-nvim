@@ -23,11 +23,12 @@ if [ -z "${WORKDIR-}" ]; then
 else
     mkdir -p "$WORKDIR"
 fi
+WORKDIR=$(readlink -f "$WORKDIR")
 
 cd "$WORKDIR"
 
 TARBALL=nvim-$VERSION.tar.gz
-$FETCH --manifest-filename="$SCRIPT_DIR/.fetch.json" download "$TARBALL" >/dev/null
+$FETCH --manifest-filename="$SCRIPT_DIR/nvim.json" download "$TARBALL" >/dev/null
 
 tar xf "$TARBALL"
 
