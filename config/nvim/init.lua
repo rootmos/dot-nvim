@@ -27,9 +27,13 @@ vim.keymap.set("n", "<leader>z", function() vim.api.nvim_command(':%s/\\s\\+$//c
 vim.g.mapleader = ","
 vim.g.maplocalleader = '-'
 
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
+function resetTabs(t)
+    local t = t or 4
+    vim.opt.tabstop = t
+    vim.opt.softtabstop = t
+    vim.opt.shiftwidth = t
+end
+resetTabs(4)
 
 require("config.lazy")
 
