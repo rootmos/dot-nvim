@@ -22,56 +22,19 @@ vim.api.nvim_set_keymap("n", "Q", "<NOP>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<F8>", ":wall<CR>", { noremap = true })
 vim.api.nvim_set_keymap("i", "<F8>", "<Esc>:wall<CR>", { noremap = true })
 
-vim.g.mapleader = ","
-vim.g.maplocalleader = '-'
-
-require("config.lazy")
-
 vim.keymap.set("n", "<leader>z", function() vim.api.nvim_command(':%s/\\s\\+$//c') end)
 
---local lazypath = vim.fn.stdpath("data") .. "/lazy.nvim"
---vim.opt.rtp:prepend(lazypath)
---require("lazy").setup({
-  --spec = {
-    --{ import = "plugins" },
-  --},
-  --checker = { enabled = true },
---})
-
---require("plugins")
---require("fzf")
---require("completion")
---require("snippet")
-
-vim.api.nvim_command("colorscheme solarized")
---vim.api.nvim_set_var("airline_solarized_bg", "dark")
---vim.api.nvim_set_var("airline_theme", "solarized")
-
-require('nvim-treesitter.configs').setup {
-    --highlight = {
-        --enable = true,
-        --additional_vim_regex_highlighting = false,
-    --},
-    --indent = {
-        --enable = true,
-    --},
-    ensure_installed = {
-       'c', 'lua', 'bash', 'terraform'
-    },
-}
+vim.g.mapleader = ","
+vim.g.maplocalleader = '-'
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
---require('tabs-vs-spaces.config'){
---    default = 4,
---    make = -1,
---    yaml = 2,
---    haskell = 2,
---    terraform = 2,
---    go = -1,
---    python = false,
---}
+
+require("config.lazy")
+
+--require("completion")
+--require("snippet")
 
 vim.g.do_filetype_lua = 1
 vim.filetype.add {
@@ -93,8 +56,5 @@ vim.filetype.add {
 
 --require('ibl').setup()
 
-vim.g.slime_target = "tmux"
-
---vim.api.nvim_set_var("background", "dark")
---vim.g.background = "dark"
+-- HACK: where is this being reset?
 vim.opt.background = "dark"
