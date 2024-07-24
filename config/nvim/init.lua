@@ -47,15 +47,5 @@ vim.filetype.add {
     },
 }
 
---require('indent_blankline').setup {
-    --enable = true,
-    --filetype = { 'python' },
-    --char_highlight_list = {
-        --"IndentBlanklineIndent",
-    --},
---}
-
---require('ibl').setup()
-
 -- HACK: where is this being reset?
 vim.opt.background = "dark"
