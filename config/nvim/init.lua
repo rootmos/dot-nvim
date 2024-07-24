@@ -22,10 +22,10 @@ vim.api.nvim_set_keymap("n", "Q", "<NOP>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<F8>", ":wall<CR>", { noremap = true })
 vim.api.nvim_set_keymap("i", "<F8>", "<Esc>:wall<CR>", { noremap = true })
 
-vim.keymap.set("n", "<leader>z", function() vim.api.nvim_command(':%s/\\s\\+$//c') end)
-
 vim.g.mapleader = ","
 vim.g.maplocalleader = '-'
+
+vim.keymap.set("n", "<leader>z", function() vim.api.nvim_command(':%s/\\s\\+$//c') end)
 
 function resetTabs(t)
     local t = t or 4
