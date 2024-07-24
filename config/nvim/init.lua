@@ -37,9 +37,6 @@ resetTabs(4)
 
 require("config.lazy")
 
---require("completion")
---require("snippet")
-
 vim.g.do_filetype_lua = 1
 vim.filetype.add {
     filename = {
