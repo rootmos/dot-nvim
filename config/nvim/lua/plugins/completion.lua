@@ -1,7 +1,11 @@
 return {
     {
         "hrsh7th/nvim-cmp",
-        dependencies = { "L3MON4D3/LuaSnip" },
+        dependencies = {
+            "L3MON4D3/LuaSnip",
+            "saadparwaiz1/cmp_luasnip",
+            "hrsh7th/cmp-buffer",
+        },
         config = function()
             local cmp = require("cmp")
             local ls = require("luasnip")
@@ -52,9 +56,5 @@ return {
                 }),
             })
         end,
-    },
-    {
-        "hrsh7th/cmp-buffer",
-        dependencies = { "hrsh7th/nvim-cmp" },
     },
 }
