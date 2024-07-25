@@ -46,6 +46,3 @@ vim.filetype.add {
         [".*%.celx"] = "lua",
     },
 }
-
--- HACK: where is this being reset?
-vim.opt.background = "dark"

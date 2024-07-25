@@ -1,10 +1,10 @@
 return {
     {
-        "altercation/vim-colors-solarized",
+        "craftzdog/solarized-osaka.nvim",
         lazy = false,
         priority = 1000,
         config = function()
-            vim.api.nvim_command("colorscheme solarized")
+            vim.cmd("colorscheme solarized-osaka")
         end,
     }
 }
