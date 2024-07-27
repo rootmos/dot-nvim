@@ -46,4 +46,14 @@ ls.add_snippets("sh", {
         t{"done", ""},
         t{"shift $((OPTIND-1))", ""},
     }),
+    s("workdir", {
+        t{'if [ -z "${WORKDIR-}" ]; then', ''},
+        t{'    WORKDIR=$(mktemp -d)', ''},
+        t{"    trap 'rm -rf $WORKDIR' EXIT", ''},
+        t{'else', ''},
+        t{'    mkdir -p "$WORKDIR"', ''},
+        t{'fi', ''},
+        t{'WORKDIR=$(readlink -f "$WORKDIR")', ''},
+        t{'cd "$WORKDIR"', ''},
+    }),
 })
