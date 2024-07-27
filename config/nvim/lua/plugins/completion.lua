@@ -52,7 +52,16 @@ return {
                 }),
                 sources = cmp.config.sources({
                     { name = "luasnip" },
-                    { name = "buffer" },
+                    {
+                        name = "buffer",
+                        option = {
+                            get_bufnrs = function()
+                                return vim.api.nvim_list_bufs()
+                            end
+                        },
+                        indexing_interval = 100,
+                        indexing_batch_size = 1000,
+                    },
                 }),
             })
         end,
