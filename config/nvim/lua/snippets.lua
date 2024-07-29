@@ -33,7 +33,7 @@ ls.add_snippets("sh", {
     s("mktemp", {
         t{"TMP=$(mktemp -d)", "trap 'rm -rf $TMP' EXIT", "", ""},
     }),
-    s("script_dir", {
+    s("SCRIPT_DIR", {
         t{'SCRIPT_DIR=$(readlink -f "$0" | xargs dirname)', ""},
     }),
     s("getopts", {
@@ -46,7 +46,7 @@ ls.add_snippets("sh", {
         t{"done", ""},
         t{"shift $((OPTIND-1))", ""},
     }),
-    s("workdir", {
+    s("WORKDIR", {
         t{'if [ -z "${WORKDIR-}" ]; then', ''},
         t{'    WORKDIR=$(mktemp -d)', ''},
         t{"    trap 'rm -rf $WORKDIR' EXIT", ''},
@@ -55,5 +55,11 @@ ls.add_snippets("sh", {
         t{'fi', ''},
         t{'WORKDIR=$(readlink -f "$WORKDIR")', ''},
         t{'cd "$WORKDIR"', ''},
+    }),
+})
+
+ls.add_snippets("make", {
+    s("CURRENT_DIR", {
+        t{"CURRENT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))", ""},
     }),
 })
