@@ -6,6 +6,12 @@
         "url": "https://github.com/neovim/neovim/archive/refs/tags/v0.10.0.tar.gz"
     },
     {
+        "sha256": "546cb2da9fffbb7e913261344bbf4cf1622721f6c5a67aa77609e976e78b8e89",
+        "target": "nvim-0.10.2.tar.gz",
+        "timestamp": "2024-10-08T11:08:05+02:00",
+        "url": "https://github.com/neovim/neovim/archive/refs/tags/v0.10.2.tar.gz"
+    },
+    {
         "sha256": "fe74369fc30a32ec7a086b1013acd0eacd674e7570eb1acc520a66180c9e9719",
         "target": "nvim-0.9.5.tar.gz",
         "timestamp": "2024-07-23T21:59:16+02:00",

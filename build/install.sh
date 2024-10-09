@@ -6,7 +6,7 @@ SCRIPT_DIR=$(readlink -f "$0" | xargs dirname)
 ROOT=$(readlink -f "$SCRIPT_DIR/..")
 FETCH=$SCRIPT_DIR/fetch
 
-VERSION=0.10.0
+VERSION=0.10.2
 while getopts "v:w:-" OPT; do
     case $OPT in
         v) VERSION=$OPTARG ;;

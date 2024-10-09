@@ -9,4 +9,4 @@ export XDG_CONFIG_HOME=$ROOT/config
 export XDG_STATE_HOME=$ROOT/state
 export XDG_DATA_HOME=$ROOT/share
 
-exec "$ROOT/root/${NVIM_VERSION-v0.10.0}/bin/nvim" "$@"
+exec "$ROOT/root/v${NVIM_VERSION-0.10.2}/bin/nvim" "$@"
