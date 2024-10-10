@@ -30,6 +30,9 @@ ls.add_snippets("sh", {
     s("bash", {
         t{"#!/bin/bash", "", "set -o nounset -o pipefail -o errexit", "", ""},
     }),
+    s("xtrace", {
+        t{"set -o xtrace"},
+    }),
     s("mktemp", {
         t{"TMP=$(mktemp -d)", "trap 'rm -rf $TMP' EXIT", "", ""},
     }),
