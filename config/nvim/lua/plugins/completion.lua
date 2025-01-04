@@ -55,6 +55,7 @@ local function mkConfig()
                 indexing_interval = 100,
                 indexing_batch_size = 1000,
             },
+            { name = "nvim_lsp" },
         })
     end
 
@@ -76,6 +77,7 @@ return {
             "L3MON4D3/LuaSnip",
             "saadparwaiz1/cmp_luasnip",
             "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-nvim-lsp",
         },
         config = mkConfig,
     },
