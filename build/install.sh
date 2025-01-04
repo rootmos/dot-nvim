@@ -6,7 +6,7 @@ SCRIPT_DIR=$(readlink -f "$0" | xargs dirname)
 ROOT=$(readlink -f "$SCRIPT_DIR/..")
 FETCH=$SCRIPT_DIR/fetch
 
-VERSION=0.10.2
+VERSION="$(<"$ROOT/version")"
 while getopts "v:w:-" OPT; do
     case $OPT in
         v) VERSION=$OPTARG ;;
@@ -32,8 +32,8 @@ $FETCH --manifest-filename="$SCRIPT_DIR/nvim.json" download "$TARBALL" >/dev/nul
 
 tar xf "$TARBALL"
 
-TARGET=${1-${TARGET-$ROOT/root/v$VERSION}}
+TARGET=${1-${TARGET-$ROOT/root/$VERSION}}
 
-cd "neovim-$VERSION"
+cd "neovim-"*
 make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$TARGET"
 make install

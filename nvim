@@ -1,12 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
 set -o nounset -o errexit
 
 ROOT=$(readlink -f "$0" | xargs dirname)
 
 export NVIM_APPNAME=nvim
-export XDG_CONFIG_HOME=$ROOT/config
-export XDG_STATE_HOME=$ROOT/state
-export XDG_DATA_HOME=$ROOT/share
+export XDG_CONFIG_HOME="$ROOT/config"
+export XDG_STATE_HOME="$ROOT/state"
+export XDG_DATA_HOME="$ROOT/share"
 
-exec "$ROOT/root/v${NVIM_VERSION-0.10.2}/bin/nvim" "$@"
+NVIM_VERSION=${NVIM_VERSION-$(<"$ROOT/version")}
+
+exec "$ROOT/root/$NVIM_VERSION/bin/nvim" "$@"

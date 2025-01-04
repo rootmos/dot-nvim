@@ -4,4 +4,6 @@ set -o nounset -o errexit
 
 ROOT=$(readlink -f "$0" | xargs dirname)
 
+"$ROOT/build/latest.sh"
+
 exec "$ROOT/nvim" --headless "+Lazy! sync" +qa
