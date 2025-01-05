@@ -2,3 +2,5 @@ root
 
 share
 state
+
+config/go/telemetry
