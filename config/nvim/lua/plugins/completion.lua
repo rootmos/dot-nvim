@@ -3,11 +3,9 @@ local function mkConfig()
     local ls = require("luasnip")
 
     local function mkMapping()
-        -- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
         return cmp.mapping.preset.insert({
             ['<CR>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
-                    -- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#safely-select-entries-with-cr
                     if ls.expandable() then
                         ls.expand()
                     elseif cmp.get_active_entry() then
@@ -22,7 +20,11 @@ local function mkConfig()
 
             ["<Tab>"] = cmp.mapping(function(fallback)
                 if cmp.visible() then
-                    cmp.select_next_item()
+                    if #cmp.get_entries() == 1 then
+                        cmp.confirm({ select = true })
+                    else
+                        cmp.select_next_item()
+                    end
                 elseif ls.locally_jumpable(1) then
                     ls.jump(1)
                 else
@@ -44,6 +46,7 @@ local function mkConfig()
 
     local function mkSources()
         return cmp.config.sources({
+            { name = "nvim_lsp" },
             { name = "luasnip" },
             {
                 name = "buffer",
@@ -55,7 +58,6 @@ local function mkConfig()
                 indexing_interval = 100,
                 indexing_batch_size = 1000,
             },
-            { name = "nvim_lsp" },
         })
     end
 
@@ -67,6 +69,7 @@ local function mkConfig()
         },
         mapping = mkMapping(),
         sources = mkSources(),
+        preselect = cmp.PreselectMode.None,
     })
 end
 
