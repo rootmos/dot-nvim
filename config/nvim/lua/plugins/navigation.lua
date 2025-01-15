@@ -8,12 +8,12 @@ return {
             local function spec()
                 return {
                     options = "--color=16",
-                    dir = require("git").toplevel(vim.fn.expand("%:p:h")),
+                    dir = vim.fn.getcwd(),
                 }
             end
 
             vim.keymap.set("n", "<leader>f", function() vim.fn["fzf#vim#files"]("", spec()) end)
-            vim.keymap.set("n", "<leader>t", function() vim.fn["fzf#vim#gitfiles"]("", spec()) end)
+            vim.keymap.set("n", "<leader>t", function() vim.fn["fzf#vim#gitfiles"]("--cached --others --exclude-standard", spec()) end)
             vim.keymap.set("n", "<leader>a", function() vim.fn["fzf#vim#ag"]("", spec()) end)
             vim.keymap.set("n", "<leader>b", function() vim.fn["fzf#vim#buffers"]("", spec()) end)
         end,
