@@ -80,10 +80,42 @@ ls.add_snippets("sh", {
         t{'WORKDIR=$(readlink -f "$WORKDIR")', ''},
         t{'cd "$WORKDIR"', ''},
     }),
+    s("echo", {
+        t{"echo 1>&2 "},
+    }),
 })
 
 ls.add_snippets("make", {
     s("CURRENT_DIR", {
         t{"CURRENT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))", ""},
+    }),
+    s(".PHONY", {
+        t{".PHONY: "}, i(1), t{"", ""},
+        rep(1), t{":", ""},
+        t{"	"}, i(0),
+    }),
+})
+
+ls.add_snippets("python", {
+    s("script_dir", {
+        t{"script_dir = os.path.dirname(os.path.realpath(__file__))", ""},
+    }),
+})
+
+ls.add_snippets("mail", {
+    s("hej", {
+        c(1, {
+            t{"Hej,", "", ""},
+            sn(1, {t{"Hej igen "}, i(1), t{",", "", ""}}),
+            t{},
+        }),
+        t{""},
+        i(0), t{"", "", ""},
+        c(2, {
+            t{"Vänliga hälsningar,", "Gustav Behm"},
+            t{"Vänliga hälsningar,", "Gustav"},
+            t{"/Gustav"},
+            t{"/G"},
+        }),
     }),
 })
