@@ -9,6 +9,7 @@ vim.opt.showmatch = true
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.opt.colorcolumn = "+1"
+vim.opt.signcolumn = "number"
 
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "~" }
