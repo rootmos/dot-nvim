@@ -11,7 +11,7 @@ vim.opt.incsearch = true
 vim.opt.colorcolumn = "+1"
 
 vim.opt.list = true
-vim.opt.listchars = "tab:» "
+vim.opt.listchars = { tab = "» ", trail = "~" }
 
 vim.api.nvim_set_keymap("i", "hh", "<Esc>", { noremap = true })
 vim.api.nvim_set_keymap("i", "uu", "<Esc>:w<CR>", { noremap = true })
