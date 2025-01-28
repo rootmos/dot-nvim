@@ -26,6 +26,12 @@ local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
 
+ls.add_snippets("", {
+    s("bash", {
+        t{"#!/bin/bash", "", "set -o nounset -o pipefail -o errexit", "", ""},
+    }),
+})
+
 ls.add_snippets("sh", {
     s("bash", {
         t{"#!/bin/bash", "", "set -o nounset -o pipefail -o errexit", "", ""},

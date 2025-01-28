@@ -50,3 +50,12 @@ vim.filetype.add {
         [".*%.celx"] = "lua",
     },
 }
+
+vim.api.nvim_create_autocmd("BufNewFile", {
+    pattern = "*.tf",
+    callback = function()
+        vim.bo.filetype = "terraform"
+    end,
+})
+
+vim.keymap.set("n", "<leader>d", function() vim.api.nvim_command(":filetype detect") end)
