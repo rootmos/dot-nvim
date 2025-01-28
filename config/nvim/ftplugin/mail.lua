@@ -1,5 +1,3 @@
-vim.opt_local.spell = true
-vim.opt_local.spelllang = "en,sv"
 vim.opt_local.linebreak = true
 vim.opt_local.formatoptions:append("lj")
 vim.opt_local.joinspaces = false

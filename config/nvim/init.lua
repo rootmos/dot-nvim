@@ -59,3 +59,14 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 })
 
 vim.keymap.set("n", "<leader>d", function() vim.api.nvim_command(":filetype detect") end)
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = {
+        "mail", "gitcommit", "tex", "markdown",
+        "c", "python", "haskell", "lua", "go",
+    },
+    callback = function()
+        vim.opt_local.spell = true
+        vim.opt_local.spelllang = "en,sv"
+    end,
+})
