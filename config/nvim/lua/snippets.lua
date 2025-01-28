@@ -108,23 +108,62 @@ ls.add_snippets("python", {
     }),
 })
 
-ls.add_snippets("mail", {
-    s("hej", {
-        c(1, {
-            t{"Hej,", "", ""},
-            sn(1, {t{"Hej igen "}, i(1), t{",", "", ""}}),
-            t{},
+do
+    ls.add_snippets("mail", {
+        s("hej", {
+            c(1, {
+                t{"Hej,", "", ""},
+                sn(1, {t{"Hej igen "}, i(1), t{",", "", ""}}),
+                t{},
+            }),
+            t{""},
+            i(0), t{"", "", ""},
+            c(2, {
+                t{"Vänliga hälsningar,", "Gustav Behm"},
+                t{"Vänliga hälsningar,", "Gustav"},
+                t{"/Gustav"},
+                t{"/G"},
+            }),
         }),
-        t{""},
-        i(0), t{"", "", ""},
-        c(2, {
-            t{"Vänliga hälsningar,", "Gustav Behm"},
-            t{"Vänliga hälsningar,", "Gustav"},
+    })
+
+    local function kind_regards(i)
+        return c(i, {
+            t{"Kind regards,", "Gustav Behm"},
+            t{"Kind regards,", "Gustav"},
             t{"/Gustav"},
             t{"/G"},
+        })
+    end
+
+    ls.add_snippets("mail", {
+        s("hello", {
+            c(1, {
+                t{"Hello,", "", ""},
+                sn(1, {t{"Hello "}, i(1), t{",", "", ""}}),
+                sn(1, {t{"Hello again "}, i(1), t{",", "", ""}}),
+                t{},
+            }),
+            t{""},
+            i(0), t{"", "", ""},
+            kind_regards(2),
         }),
-    }),
-})
+    })
+
+    ls.add_snippets("mail", {
+        s("hi", {
+            c(1, {
+                t{"Hi,", "", ""},
+                sn(1, {t{"Hi "}, i(1), t{",", "", ""}}),
+                sn(1, {t{"Hi again "}, i(1), t{",", "", ""}}),
+                t{},
+            }),
+            t{""},
+            i(0), t{"", "", ""},
+            kind_regards(2),
+        }),
+    })
+end
 
 ls.add_snippets("go", {
     s("go", {
