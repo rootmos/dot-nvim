@@ -27,10 +27,12 @@ local function mkConfig()
             vim.lsp.buf.format({async = false})
         end
     })
+
+    vim.keymap.set("n", "<leader>d", function() vim.lsp.buf.definition() end)
 end
 
 return {
-    { 
+    {
         "neovim/nvim-lspconfig",
         config = mkConfig,
     },

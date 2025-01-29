@@ -15,7 +15,7 @@ vim.api.nvim_create_autocmd("BufNewFile", {
     end,
 })
 
-vim.keymap.set("n", "<leader>d", function() vim.api.nvim_command(":filetype detect") end)
+vim.keymap.set("n", "<leader>r", function() vim.api.nvim_command(":filetype detect") end)
 
 vim.api.nvim_create_autocmd("FileType", {
     pattern = {
