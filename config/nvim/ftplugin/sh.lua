@@ -1,14 +1,18 @@
 local chmodxed = nil
 vim.keymap.set("n", "<leader>x", function()
-    chmodxed = not chmodxed
+    local st = not chmodxed
 
-    vim.fn.system {
+    if vim.system {
         "chmod",
-        chmodxed and "+x" or "-x",
+        st and "+x" or "-x",
         vim.api.nvim_buf_get_name(0)
-    }
+    }:wait().code ~= 0 then
+        print("unable to chmod " .. vim.fn.expand("%"))
+        return
+    end
 
-    if chmodxed then
+    chmodxed = st
+    if st then
         print("chmod +x " .. vim.fn.expand("%"))
     else
         print("chmod -x " .. vim.fn.expand("%"))
