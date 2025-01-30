@@ -110,10 +110,11 @@ ls.add_snippets("python", {
 
 do
     ls.add_snippets("mail", {
-        s("hej", {
+        s("Hej", {
             c(1, {
-                t{"Hej,", "", ""},
+                sn(1, {t{"Hej "}, i(1), t{",", ""}}),
                 sn(1, {t{"Hej igen "}, i(1), t{",", "", ""}}),
+                t{"Hej,", "", ""},
                 t{},
             }),
             t{""},
@@ -137,11 +138,11 @@ do
     end
 
     ls.add_snippets("mail", {
-        s("hello", {
+        s("Hello", {
             c(1, {
-                t{"Hello,", "", ""},
-                sn(1, {t{"Hello "}, i(1), t{",", "", ""}}),
+                sn(1, {t{"Hello "}, i(1), t{",", ""}}),
                 sn(1, {t{"Hello again "}, i(1), t{",", "", ""}}),
+                t{"Hello,", "", ""},
                 t{},
             }),
             t{""},
@@ -151,11 +152,11 @@ do
     })
 
     ls.add_snippets("mail", {
-        s("hi", {
+        s("Hi", {
             c(1, {
-                t{"Hi,", "", ""},
-                sn(1, {t{"Hi "}, i(1), t{",", "", ""}}),
+                sn(1, {t{"Hi "}, i(1), t{",", ""}}),
                 sn(1, {t{"Hi again "}, i(1), t{",", "", ""}}),
+                t{"Hi,", "", ""},
                 t{},
             }),
             t{""},
