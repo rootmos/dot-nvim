@@ -46,6 +46,8 @@ local function mkConfig()
 
     local function mkSources()
         return cmp.config.sources({
+            { name = "nvim_lsp" },
+            { name = "luasnip" },
             {
                 name = "buffer",
                 option = {
@@ -56,8 +58,6 @@ local function mkConfig()
                 indexing_interval = 100,
                 indexing_batch_size = 1000,
             },
-            { name = "luasnip" },
-            { name = "nvim_lsp" },
             { name = 'async_path' },
         })
     end
