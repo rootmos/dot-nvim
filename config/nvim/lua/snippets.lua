@@ -87,7 +87,10 @@ ls.add_snippets("sh", {
         t{'cd "$WORKDIR"', ''},
     }),
     s("echo", {
-        t{"echo 1>&2 "},
+        t{"echo 1>&2 \""}, i(0), t{"\""},
+    }),
+    s("mapfile", {
+        t{"mapfile -t "}, i(1), t{" < <("}, i(2), t{")", ""},
     }),
 })
 
