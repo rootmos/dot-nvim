@@ -17,5 +17,6 @@
   "tabs-vs-spaces": { "branch": "master", "commit": "ca7f5182fe4e1eb55ef0efac9079e7155d8a7b7d" },
   "vim-airline": { "branch": "master", "commit": "7a552f415c48aed33bf7eaa3c50e78504d417913" },
   "vim-airline-themes": { "branch": "master", "commit": "cda3b5ea087f7e301a3d4e61727108f66ba6dd20" },
+  "vim-peekaboo": { "branch": "master", "commit": "cc4469c204099c73dd7534531fa8ba271f704831" },
   "vim-slime": { "branch": "main", "commit": "9bc2e13f8441b09fd7352a11629a4da0ea4cb058" }
 }
