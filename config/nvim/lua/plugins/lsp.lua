@@ -33,9 +33,32 @@ local function mkConfig()
     vim.keymap.set("n", "<leader>d", function() vim.lsp.buf.definition() end)
 end
 
+local function configureLspsaga()
+    local lspsaga = require("lspsaga")
+    lspsaga.setup{
+        lightbulb = {
+            enable = false,
+        },
+        symbol_in_winbar = {
+            enable = false,
+        },
+    }
+
+    vim.keymap.set("n", "<leader>h", function() require("lspsaga.codeaction"):code_action() end)
+    vim.keymap.set("n", "<leader>d", function() require("lspsaga.symbol"):outline() end)
+end
+
 return {
     {
         "neovim/nvim-lspconfig",
         config = mkConfig,
     },
+    {
+        "nvimdev/lspsaga.nvim",
+        dependencies = {
+            "neovim/nvim-lspconfig",
+            "nvim-tree/nvim-web-devicons",
+        },
+        config = configureLspsaga,
+    }
 }
