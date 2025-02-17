@@ -8,6 +8,8 @@ return {
                 theme = "solarized_dark",
             },
             sections = {
+                lualine_b = { "branch" },
+                lualine_c = { "%f %h%w%m%r" },
                 lualine_x = { "encoding", "filetype" },
             },
         }
