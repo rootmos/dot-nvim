@@ -31,6 +31,7 @@ local function mkConfig()
     })
 
     vim.keymap.set("n", "<leader>d", function() vim.lsp.buf.definition() end)
+    vim.keymap.set("n", '<leader>D', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end)
 end
 
 local function configureLspsaga()
