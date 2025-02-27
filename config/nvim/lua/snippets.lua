@@ -86,11 +86,21 @@ ls.add_snippets("sh", {
         t{'WORKDIR=$(readlink -f "$WORKDIR")', ''},
         t{'cd "$WORKDIR"', ''},
     }),
-    s("echo", {
+    s("eecho", {
         t{"echo 1>&2 \""}, i(0), t{"\""},
     }),
     s("mapfile", {
         t{"mapfile -t "}, i(1), t{" < <("}, i(2), t{")", ""},
+    }),
+    s("if-z", {
+        t{'if [ -z "${'}, i(1), t{'-}" ]; then', ""},
+        t{'    '}, i(0), t{"", ""},
+        t{"fi"},
+    }),
+    s("if-n", {
+        t{'if [ -n "${'}, i(1), t{'-}" ]; then', ""},
+        t{'    '}, i(0), t{"", ""},
+        t{"fi"},
     }),
 })
 
