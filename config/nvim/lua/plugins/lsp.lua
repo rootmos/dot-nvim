@@ -12,6 +12,8 @@ local function mkConfig()
 
     lspconfig.bashls.setup{}
 
+    lspconfig.csharp_ls.setup{}
+
     vim.api.nvim_create_autocmd("BufWritePre", {
       pattern = "*.go",
       callback = function()
@@ -46,7 +48,7 @@ local function configureLspsaga()
     }
 
     vim.keymap.set("n", "<leader>h", function() require("lspsaga.codeaction"):code_action() end)
-    vim.keymap.set("n", "<leader>d", function() require("lspsaga.symbol"):outline() end)
+    vim.keymap.set("n", "<leader>T", function() require("lspsaga.symbol"):outline() end)
 end
 
 return {
