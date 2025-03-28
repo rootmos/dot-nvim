@@ -6,6 +6,10 @@ vim.filetype.add {
     pattern = {
         [".*%.celx"] = "lua",
     },
+    extension = {
+       sms = "sms",
+       chat = "chat",
+    },
 }
 
 vim.api.nvim_create_autocmd("BufNewFile", {
@@ -19,8 +23,9 @@ vim.keymap.set("n", "<leader>r", function() vim.api.nvim_command(":filetype dete
 
 vim.api.nvim_create_autocmd("FileType", {
     pattern = {
-        "mail", "gitcommit", "tex", "markdown",
+        "gitcommit", "tex", "markdown",
         "c", "python", "haskell", "lua", "go",
+        "mail", "sms", "chat",
     },
     callback = function()
         vim.opt_local.spell = true

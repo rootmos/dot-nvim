@@ -42,3 +42,5 @@ resetTabs(4)
 
 require("config.lazy")
 require("filetypes")
+
+vim.keymap.set("n", "<leader>y", require("yank").yank_paragraph)
