@@ -1,3 +1,26 @@
+toggleDiagnostics = (function(initial)
+    local toggle = initial or (vim.diagnostic.is_enabled() and 1 or 0)
+
+    function f()
+        if toggle == 0 then
+            vim.diagnostic.enable(false)
+            vim.diagnostic.config({virtual_text = false})
+        elseif toggle == 1 then
+            vim.diagnostic.enable(true)
+            vim.diagnostic.config({virtual_text = true})
+        elseif toggle == 2 then
+            vim.diagnostic.enable(true)
+            vim.diagnostic.config({virtual_text = false})
+        end
+
+        toggle = (toggle + 1) % 3
+    end
+
+    f()
+
+    return f
+end)()
+
 local function mkConfig()
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
@@ -32,8 +55,8 @@ local function mkConfig()
         end
     })
 
-    vim.keymap.set("n", "<leader>d", function() vim.lsp.buf.definition() end)
-    vim.keymap.set("n", '<leader>D', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end)
+    vim.keymap.set("n", "<leader>D", function() vim.lsp.buf.definition() end)
+    vim.keymap.set("n", "<leader>d", function() toggleDiagnostics() end)
 end
 
 local function configureLspsaga()
