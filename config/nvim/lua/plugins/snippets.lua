@@ -15,7 +15,7 @@ return {
                 end
             end, {silent = true})
 
-            require("snippets")
+            require("luasnip.loaders.from_lua").load({ paths = os.getenv("NVIM_SNIPPETS") })
         end,
     },
 }

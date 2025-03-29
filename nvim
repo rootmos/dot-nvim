@@ -8,6 +8,7 @@ export NVIM_APPNAME=nvim
 export XDG_CONFIG_HOME="$ROOT/config"
 export XDG_STATE_HOME="$ROOT/state"
 export XDG_DATA_HOME="$ROOT/share"
+export NVIM_SNIPPETS="$ROOT/snippets"
 
 NVIM_VERSION=${NVIM_VERSION-$(<"$ROOT/version")}
 
