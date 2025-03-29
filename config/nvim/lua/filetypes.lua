@@ -30,5 +30,26 @@ vim.api.nvim_create_autocmd("FileType", {
     callback = function()
         vim.opt_local.spell = true
         vim.opt_local.spelllang = "en,sv"
+
+        local enc = vim.bo.fileencoding
+        if enc == "" then
+            enc = "utf-8"
+        end
+
+        local spellfile = ""
+        for _, fn in ipairs{ "personal", "en", "sv" } do
+            local path = vim.fs.joinpath(
+                os.getenv("NVIM_SPELL"),
+                string.format("%s.%s.add", fn, enc)
+            )
+
+            vim.cmd { cmd = "mkspell", args = { path }, bang = true, mods = { silent = true } }
+
+            if spellfile ~= "" then
+                spellfile = spellfile .. ","
+            end
+            spellfile = spellfile .. path
+        end
+        vim.opt_local.spellfile = spellfile
     end,
 })
