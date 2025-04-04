@@ -12,4 +12,4 @@ return {
         t{"import logging", ""},
         t{"logger = logging.getLogger(__name__)"},
     }),
-})
+}
