@@ -53,3 +53,12 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.opt_local.spellfile = spellfile
     end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "sh", "c" },
+    callback = function()
+        vim.keymap.set("n", "K", function()
+            vim.cmd { cmd = "Man", args = { vim.fn.expand("<cword>") }, mods = { hide = true } }
+        end)
+    end,
+})
