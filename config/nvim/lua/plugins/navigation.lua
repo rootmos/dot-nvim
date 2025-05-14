@@ -1,22 +1,43 @@
 return {
     {
-        "https://github.com/junegunn/fzf.vim",
-        dependencies = {
-            { "junegunn/fzf" },
-        },
+        "ibhagwan/fzf-lua",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
         config = function()
-            local function spec()
-                return {
-                    options = { "--color=16" },
-                    dir = vim.fn.getcwd(),
-                }
-            end
+            local fzf = require("fzf-lua")
 
-            vim.keymap.set("n", "<leader>f", function() vim.fn["fzf#vim#files"]("", spec()) end)
-            vim.keymap.set("n", "<leader>t", function() vim.fn["fzf#vim#gitfiles"]("--cached --others --exclude-standard", spec()) end)
-            vim.keymap.set("n", "<leader>a", function() vim.fn["fzf#vim#ag"](vim.fn.expand("<cword>"), spec()) end)
-            vim.keymap.set("n", "<leader>b", function() vim.fn["fzf#vim#buffers"]("", spec()) end)
-            vim.keymap.set("n", "<leader>j", function() vim.fn["fzf#vim#jumps"](spec()) end)
-        end,
-    },
+            fzf.setup {
+                fzf_colors = true,
+                winopts = {
+                    fullscreen = true,
+                    border = "none",
+                    preview = {
+                        border = "noborder",
+                    },
+                },
+            }
+
+            vim.keymap.set("n", "<leader>f", fzf.files)
+            vim.keymap.set("n", "<leader>t", fzf.git_files)
+            vim.keymap.set("n", "<leader>s", fzf.git_status)
+            vim.keymap.set("n", "<leader>k", fzf.manpages)
+            vim.keymap.set("n", "<leader>b", fzf.buffers)
+            vim.keymap.set("n", "<leader>j", fzf.jumps)
+            vim.keymap.set("n", "<leader>r", fzf.resume)
+
+            vim.keymap.set("n", "<leader>g", function()
+                local cwd = vim.fn.getcwd()
+                local sp = { cwd }
+
+                local g = require("git").toplevel(cwd)
+                if g ~= nil then
+                    table.insert(sp, g)
+                end
+
+                fzf.grep {
+                    search = vim.fn.expand("<cword>"),
+                    search_paths = sp,
+                }
+            end)
+        end
+    }
 }
