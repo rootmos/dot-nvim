@@ -58,7 +58,7 @@ local function mkConfig()
                 indexing_interval = 100,
                 indexing_batch_size = 1000,
             },
-            { name = 'async_path' },
+            { name = "async_path" },
         })
     end
 

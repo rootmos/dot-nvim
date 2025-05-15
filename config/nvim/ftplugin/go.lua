@@ -1,1 +1,1 @@
-vim.opt_local.listchars:prepend{ tab = "  "}
+vim.opt_local.listchars:prepend{ tab = "  " }

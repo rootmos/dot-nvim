@@ -34,4 +34,11 @@ return {
             }
         end,
     },
+    { "neovimhaskell/haskell-vim" },
+    {
+        "mrcjkb/haskell-tools.nvim",
+        version = "*",
+        lazy = false,
+    },
+    "luc-tielen/telescope_hoogle",
 }
