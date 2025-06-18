@@ -23,7 +23,7 @@ vim.keymap.set("n", "<leader>R", function() vim.api.nvim_command(":filetype dete
 
 vim.api.nvim_create_autocmd("FileType", {
     pattern = {
-        "gitcommit", "tex", "markdown",
+        "gitcommit", "tex", "markdown", "text",
         "c", "python", "haskell", "lua", "go",
         "mail", "sms", "chat",
     },

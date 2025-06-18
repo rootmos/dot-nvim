@@ -8,6 +8,9 @@ return {
     s("iso8601", {
         t{'isoformat(timespec="seconds")'},
     }),
+    s("utf8", {
+        t{'encode("UTF-8")'},
+    }),
     s("logging", {
         t{"import logging", ""},
         t{"logger = logging.getLogger(__name__)"},
