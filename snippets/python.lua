@@ -15,4 +15,8 @@ return {
         t{"import logging", ""},
         t{"logger = logging.getLogger(__name__)"},
     }),
+    s("open", {
+        t{"with open("}, i(1), t{', "'}, i(2), t{'", encoding="UTF-8") as f:', ""},
+        t{"    "}, i(3),
+    })
 }
