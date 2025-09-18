@@ -24,18 +24,18 @@ end)()
 local function mkConfig()
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-    local lspconfig = require("lspconfig")
-    lspconfig.gopls.setup{
+    vim.lsp.config["gopls"] = {
         capabilities = capabilities,
     }
+    vim.lsp.enable("gopls")
 
-    lspconfig.pyright.setup{
+    vim.lsp.config["pyright"] = {
         capabilities = capabilities,
     }
+    vim.lsp.enable("pyright")
 
-    lspconfig.bashls.setup{}
-
-    lspconfig.csharp_ls.setup{}
+    vim.lsp.config["bashls"] = {}
+    vim.lsp.enable("bashls")
 
     vim.api.nvim_create_autocmd("BufWritePre", {
       pattern = "*.go",
