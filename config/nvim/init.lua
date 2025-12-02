@@ -45,7 +45,8 @@ require("config.lazy")
 require("filetypes")
 require("K")
 
-vim.keymap.set("n", "<leader>y", require("yank").yank_paragraph)
+vim.keymap.set("n", "<leader>y", require("yank").yank_word)
+vim.keymap.set("n", "<leader>Y", require("yank").yank_paragraph)
 
 -- https://stackoverflow.com/a/19620009
 vim.keymap.set("n", "Q", ":b#|bd#<CR>")
