@@ -1,11 +1,15 @@
 local M = {
     reg = "+",
     wordsep = " \t,|",
+    modes = {
+        "word",
+        "paragraph",
+    },
 }
 
 local ns = vim.api.nvim_create_namespace("yank")
 
-function get_paragraph(pos)
+local function get_paragraph(pos)
     local buf, row, col, _ = unpack(pos)
 
     local function get(r)
@@ -20,7 +24,7 @@ function get_paragraph(pos)
 
     local l = get(row)
     if l == nil or l == "" then
-        return nil
+        return nil, nil, nil
     end
 
     local ls = {l}
@@ -49,30 +53,6 @@ function get_paragraph(pos)
     return ls, {s-1, 0}, {t, tl}
 end
 
-function M.yank_paragraph(reg, sep)
-    local sep = sep or " "
-
-    local pos = vim.fn.getpos(".")
-    local ls, start, finish = get_paragraph(pos)
-
-    if ls == nil then
-        return nil
-    end
-
-    local text = ""
-    for _, l in ipairs(ls) do
-        if text ~= "" then
-            text = text .. " "
-        end
-        text = text .. l
-    end
-    vim.fn.setreg(M.reg, text)
-
-    vim.hl.range(pos[1], ns, "Search", start, finish, { timeout = 300 })
-
-    return text
-end
-
 local function is_wordsep(c)
     local ws = M.wordsep
     for i = 1,#ws do
@@ -84,9 +64,7 @@ local function is_wordsep(c)
     return false
 end
 
-function M.yank_word(reg)
-    local pos = vim.fn.getpos(".")
-
+local function get_word(pos)
     local buf, row, col, _ = unpack(pos)
     local ls = vim.api.nvim_buf_get_lines(buf, row-1, row, false)
     local l = ls[1]
@@ -106,8 +84,68 @@ function M.yank_word(reg)
         j = j + 1
     end
 
-    vim.fn.setreg(M.reg, l:sub(i, j))
-    vim.hl.range(buf, ns, "Search", {row-1, i-1}, {row-1, j}, { timeout = 300 })
+    return l:sub(i, j), {row-1, i-1}, {row-1, j}
 end
 
-return M
+local function join_lines(ls, sep)
+    local sep = sep or " "
+    local text = ""
+    for _, l in ipairs(ls) do
+        -- TODO strip l
+        if text ~= "" then
+            text = text .. sep
+        end
+        text = text .. l
+    end
+    return text
+end
+
+local function do_highlight(bufnr, start, finish)
+    vim.hl.range(bufnr, ns, "Search", start, finish, { timeout = 300 })
+end
+
+function M.paragraph(pos)
+    local pos = pos or vim.fn.getpos(".")
+    local ls, start, finish = get_paragraph(pos)
+
+    do_highlight(pos[1], start, finish)
+
+    return join_lines(ls)
+end
+
+function M.word(pos)
+    local pos = pos or vim.fn.getpos(".")
+    local text, start, finish = get_word(pos)
+
+    do_highlight(pos[1], start, finish)
+
+    return text
+end
+
+function M.yank(mode)
+    local m = (vim.b.yank or M.modes)[mode or 1]
+
+    local f
+    if type(m) == "table" then
+        f = m[2]
+        m = m[1]
+    else
+        f = function(text) vim.fn.setreg(M.reg, text) end
+    end
+
+    if m == "word" then
+        f(M.word())
+    elseif m == "paragraph" then
+        f(M.paragraph())
+    else
+        error("requesting unexpected mode", mode)
+    end
+end
+
+return setmetatable(M, {
+    __call = function(N, mode)
+        return function()
+            N.yank(mode)
+        end
+    end,
+})

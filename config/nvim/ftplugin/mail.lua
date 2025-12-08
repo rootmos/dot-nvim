@@ -3,6 +3,8 @@ vim.opt_local.formatoptions:append("lj")
 vim.opt_local.joinspaces = false
 vim.opt_local.wrap = true
 
+vim.b.yank = { "paragraph", "word" }
+
 local longLines = true -- i.e. default is short lines
 function toggleLongLines()
     longLines = not longLines
