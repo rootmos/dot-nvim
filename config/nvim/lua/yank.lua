@@ -129,7 +129,8 @@ function M.yank(mode)
     if type(m) == "table" then
         f = m[2]
         m = m[1]
-    else
+    end
+    if not f then
         f = function(text) vim.fn.setreg(M.reg, text) end
     end
 

@@ -6,6 +6,10 @@ return {
             options = {
                 -- https://github.com/nvim-lualine/lualine.nvim/blob/master/THEMES.md
                 theme = "solarized_dark",
+
+                disabled_filetypes = {
+                    "twitch",
+                },
             },
             sections = {
                 lualine_b = { "branch" },

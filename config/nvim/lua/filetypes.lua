@@ -7,8 +7,9 @@ vim.filetype.add {
         [".*%.celx"] = "lua",
     },
     extension = {
-       sms = "sms",
-       chat = "chat",
+        sms = "sms",
+        chat = "chat",
+        twitch = "twitch",
     },
 }
 
