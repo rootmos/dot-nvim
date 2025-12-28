@@ -7,8 +7,8 @@ local function go(url)
 end
 
 vim.b.yank = {
-    { "word", go },
-    "word",
+    { "url", go },
+    "url",
 }
 
 vim.wo.cursorline = true

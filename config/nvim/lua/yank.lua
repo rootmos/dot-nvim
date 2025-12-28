@@ -5,6 +5,7 @@ local M = {
         "word",
         "paragraph",
         "line",
+        "url",
     },
 }
 
@@ -96,6 +97,19 @@ local function get_line(pos)
     return l, {row-1, 0}, {row-1, L}
 end
 
+local function get_url(pos)
+    local buf, row, _, _ = unpack(pos)
+    local ls = vim.api.nvim_buf_get_lines(buf, row-1, row, false)
+    local l = ls[1]
+
+    local i, j = l:find("[%w+.-]+://[%w/%?#@!&%+%.:=~_%-%%]+")
+    if i == nil then
+        return
+    end
+
+    return l:sub(i,j), {row-1, i-1}, {row-1, j}
+end
+
 local function join_lines(ls, sep)
     local sep = sep or " "
     local text = ""
@@ -140,6 +154,19 @@ function M.line(pos)
     return text
 end
 
+function M.url(pos)
+    local pos = pos or vim.fn.getpos(".")
+    local text, start, finish = get_url(pos)
+
+    if text == nil then
+        return
+    end
+
+    do_highlight(pos[1], start, finish)
+
+    return text
+end
+
 function M.yank(mode)
     local m = (vim.b.yank or M.modes)[mode or 1]
 
@@ -158,6 +185,8 @@ function M.yank(mode)
         f(M.paragraph())
     elseif m == "line" then
         f(M.line())
+    elseif m == "url" then
+        f(M.url())
     else
         error(string.format("requesting unexpected mode: %s (%s)", m, mode))
     end
