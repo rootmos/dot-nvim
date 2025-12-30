@@ -30,7 +30,7 @@ vim.api.nvim_set_keymap("i", "<S-F8>", "<Esc>:wall<CR>:qall<CR>", { noremap = tr
 vim.g.mapleader = ","
 vim.g.maplocalleader = '-'
 
-vim.keymap.set("n", "<leader>z", function() vim.api.nvim_command(':%s/\\s\\+$//c') end)
+vim.keymap.set("n", "<leader>z", function() vim.cmd(':%s/\\s\\+$//c') end)
 
 function resetTabs(t)
     local t = t or 4
@@ -45,15 +45,35 @@ require("config.lazy")
 require("filetypes")
 require("K")
 
-local yank = require("yank")
-vim.keymap.set("n", "<leader>y", yank(1))
-vim.keymap.set("n", "<leader>Y", yank(2))
-vim.keymap.set("n", "<leader>p", '"' .. yank.reg .. 'p')
-vim.keymap.set("n", "<leader>P", '"' .. yank.reg .. 'P')
+do
+    local yank = require("yank")
+    vim.keymap.set("n", "<leader>y", yank(1))
+    vim.keymap.set("n", "<leader>Y", yank(2))
+    vim.keymap.set("n", "<leader>p", '"' .. yank.reg .. 'p')
+    vim.keymap.set("n", "<leader>P", '"' .. yank.reg .. 'P')
+end
 
 -- https://stackoverflow.com/a/19620009
 vim.keymap.set("n", "Q", ":b#|bd#<CR>")
 
 function fileFinder()
     require("telescope.builtin").git_files()
+end
+
+
+if os.getenv("TESTS") then
+    vim.schedule(function() vim.cmd.quit { bang = true } end)
+
+    local sanity_check = os.getenv("TESTS_SANITY_CHECK")
+    if sanity_check ~= nil then
+        error(sanity_check)
+    end
+
+    local token_path = os.getenv("TESTS_TOKEN_PATH")
+    if token_path ~= nil then
+        local rt = vim.uv.clock_gettime("realtime")
+        local f = io.open(token_path, "w")
+        f:write(string.format("%d.%09d", rt["sec"], rt["nsec"]))
+        f:close()
+    end
 end

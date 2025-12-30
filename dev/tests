@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+
+import argparse
+from datetime import datetime, UTC
+import os
+import logging
+import random
+import shutil
+import subprocess
+import sys
+import string
+import tempfile
+from typing import Callable
+
+try:
+    import argcomplete
+    has_argcomplete = True
+except ImportError:
+    has_argcomplete = False
+
+whoami = "tests"
+def env(var, default=None):
+    return os.environ.get("TESTS_" + var, default)
+logger = logging.getLogger(whoami)
+
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+
+def temporary_directory(what=None):
+    return tempfile.TemporaryDirectory(prefix=f"{whoami}-{what + '-' if what else ''}")
+
+def fresh_salt(n=5):
+    alphabeth = string.ascii_letters + string.digits
+    return ''.join(random.choices(alphabeth, k=n))
+
+def setup_logger(level):
+    logger.setLevel(level.upper())
+
+    ch = logging.StreamHandler()
+    ch.setLevel(level.upper())
+
+    f = logging.Formatter(fmt="%(asctime)s:%(name)s:%(levelname)s %(message)s", datefmt="%Y-%m-%dT%H:%M:%S%z")
+    ch.setFormatter(f)
+
+    logger.addHandler(ch)
+
+def parse_args(build: Callable[[], argparse.ArgumentParser]) -> argparse.Namespace:
+    early = argparse.ArgumentParser(add_help=False)
+    main_parser = build()
+
+    for p in [ early, main_parser ]:
+        p.add_argument("--log", default=env("LOG_LEVEL", "INFO"), help="set log level")
+
+    if has_argcomplete:
+        for p in [ early, main_parser ]:
+            p.add_argument("--completion-script", action="store_true", help="print script that when sourced configures shell completion, then exit")
+
+    args, _ = early.parse_known_args()
+
+    setup_logger(args.log)
+    logger.debug("early args: %s", args)
+
+    if has_argcomplete and args.completion_script:
+        prog = os.path.basename(sys.argv[0])
+        sys.stdout.write(argcomplete.shellcode([ prog ]))
+        sys.exit(0)
+
+    if has_argcomplete:
+        argcomplete.autocomplete(main_parser)
+
+    return main_parser.parse_args()
+
+def main_parser() -> argparse.ArgumentParser:
+    description = "dot-nvim tests"
+    parser = argparse.ArgumentParser(description=description, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+    parser.add_argument("-w", "--workdir", default=env("WORKDIR"), help="workdir")
+
+    default_target = os.path.realpath(os.path.join(SCRIPT_DIR, "..", "nvim"))
+    parser.add_argument("-t", "--target", default=env("TARGET", default_target), help="neovim target")
+
+    parser.add_argument("-S", "--sanity-check", action="store_true")
+
+    return parser
+
+def main(args, workdir):
+    logger.debug("workdir: %s", workdir)
+    ts = datetime.now(UTC).strftime("%y%m%dT%H%M%SZ")
+    salt = fresh_salt()
+    testdir = os.path.join(workdir, f"{ts}-{salt}")
+    logger.debug("testdir: %s", testdir)
+    os.makedirs(testdir)
+
+    token_path = os.path.join(testdir, "token")
+    env = {
+        "TESTS": "1",
+        "TESTS_TOKEN_PATH": token_path,
+        **os.environ
+    }
+
+    if args.sanity_check:
+        env["TESTS_SANITY_CHECK"] = "1"
+
+    script = shutil.which("script")
+    assert script is not None
+
+    typescript = os.path.join(testdir, "typescript")
+
+    cmdline = [ script ]
+    cmdline += [ "--return" ]
+    cmdline += [ "--command", args.target ]
+    cmdline += [ "--log-out", typescript ]
+    p = subprocess.run(cmdline, cwd=testdir, env=env, timeout=2.0, stdout=subprocess.DEVNULL, check=False)
+
+    if not args.sanity_check:
+        assert p.returncode == 0
+        with open(token_path) as f:
+            ts = f.read()
+        logger.debug("successful test token: %s", ts)
+    else:
+        assert p.returncode == 1
+        assert not os.path.exists(token_path)
+
+if __name__ == "__main__":
+    args = parse_args(main_parser)
+    logger.debug("args: %s", args)
+
+    if args.workdir is not None:
+        main(args=args, workdir=args.workdir)
+    else:
+        with temporary_directory() as tmp:
+            main(args=args, workdir=tmp)
