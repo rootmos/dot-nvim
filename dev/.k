@@ -1,9 +1,9 @@
 ROOT=$(readlink -f "$K_DIR/..")
 NVIM="$ROOT/nvim"
 
-export TESTS_WORKDIR="$K_DIR/workdir"
-export TESTS_TARGET="$NVIM"
-export TESTS_LOG_LEVEL=DEBUG
+export DOT_NVIM_TESTS_WORKDIR="$K_DIR/workdir"
+export DOT_NVIM_TESTS_TARGET="$NVIM"
+export DOT_NVIM_TESTS_LOG_LEVEL=DEBUG
 
 go() {
     ./tests "$@"

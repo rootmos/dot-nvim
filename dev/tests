@@ -20,7 +20,7 @@ except ImportError:
 
 whoami = "tests"
 def env(var, default=None):
-    return os.environ.get("TESTS_" + var, default)
+    return os.environ.get("DOT_NVIM_TESTS_" + var, default)
 logger = logging.getLogger(whoami)
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -92,24 +92,23 @@ def main(args, workdir):
 
     token_path = os.path.join(testdir, "token")
     env = {
-        "TESTS": "1",
-        "TESTS_TOKEN_PATH": token_path,
+        "DOT_NVIM_TESTS": "1",
+        "DOT_NVIM_TESTS_TOKEN_PATH": token_path,
         **os.environ
     }
 
     if args.sanity_check:
-        env["TESTS_SANITY_CHECK"] = "1"
+        env["DOT_NVIM_TESTS_SANITY_CHECK"] = "1"
 
-    script = shutil.which("script")
-    assert script is not None
+    unbuffer = shutil.which("unbuffer")
+    assert unbuffer is not None
 
-    typescript = os.path.join(testdir, "typescript")
+    tty = os.path.join(testdir, "tty")
 
-    cmdline = [ script ]
-    cmdline += [ "--return" ]
-    cmdline += [ "--command", args.target ]
-    cmdline += [ "--log-out", typescript ]
-    p = subprocess.run(cmdline, cwd=testdir, env=env, timeout=2.0, stdout=subprocess.DEVNULL, check=False)
+    cmdline = [ unbuffer ]
+    cmdline += [ args.target ]
+    with open(tty, "wb") as f:
+        p = subprocess.run(cmdline, cwd=testdir, env=env, timeout=2.0, stdout=f, check=False)
 
     if not args.sanity_check:
         assert p.returncode == 0

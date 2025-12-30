@@ -61,15 +61,15 @@ function fileFinder()
 end
 
 
-if os.getenv("TESTS") then
+if os.getenv("DOT_NVIM_TESTS") then
     vim.schedule(function() vim.cmd.quit { bang = true } end)
 
-    local sanity_check = os.getenv("TESTS_SANITY_CHECK")
+    local sanity_check = os.getenv("DOT_NVIM_TESTS_SANITY_CHECK")
     if sanity_check ~= nil then
         error(sanity_check)
     end
 
-    local token_path = os.getenv("TESTS_TOKEN_PATH")
+    local token_path = os.getenv("DOT_NVIM_TESTS_TOKEN_PATH")
     if token_path ~= nil then
         local rt = vim.uv.clock_gettime("realtime")
         local f = io.open(token_path, "w")
