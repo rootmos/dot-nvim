@@ -78,7 +78,9 @@ def main_parser() -> argparse.ArgumentParser:
     default_target = os.path.realpath(os.path.join(SCRIPT_DIR, "..", "nvim"))
     parser.add_argument("-t", "--target", default=env("TARGET", default_target), help="neovim target")
 
-    parser.add_argument("-S", "--sanity-check", action="store_true")
+    tests = parser.add_mutually_exclusive_group(required=True)
+    tests.add_argument("-S", "--sanity-check", action="store_true")
+    tests.add_argument("-M", "--main", action="store_true")
 
     return parser
 
@@ -90,10 +92,18 @@ def main(args, workdir):
     logger.debug("testdir: %s", testdir)
     os.makedirs(testdir)
 
-    token_path = os.path.join(testdir, "token")
+    if args.main:
+        test_case = "main"
+    elif args.sanity_check:
+        test_case = "sanity-check"
+    else:
+        raise NotImplementedError()
+    logger.info("test-case: %s", test_case)
+
+    result_path = os.path.join(testdir, "result")
     env = {
-        "DOT_NVIM_TESTS": "1",
-        "DOT_NVIM_TESTS_TOKEN_PATH": token_path,
+        "DOT_NVIM_TESTS": test_case,
+        "DOT_NVIM_TESTS_RESULT_PATH": result_path,
         **os.environ
     }
 
@@ -110,14 +120,19 @@ def main(args, workdir):
     with open(tty, "wb") as f:
         p = subprocess.run(cmdline, cwd=testdir, env=env, timeout=2.0, stdout=f, check=False)
 
+    with open(result_path) as f:
+        ls = f.readlines()
+    ls = [ l.rstrip() for l in ls ]
+    result = bool(int(ls[2]))
+    logger.info("result: %s", result)
+    main_time = (float(ls[1]) - float(ls[0]))*1e3
+    logger.info("main.lua: %fms", main_time)
+    logger.info("message: %s", ls[3:])
+
     if not args.sanity_check:
         assert p.returncode == 0
-        with open(token_path) as f:
-            ts = f.read()
-        logger.debug("successful test token: %s", ts)
     else:
         assert p.returncode == 1
-        assert not os.path.exists(token_path)
 
 if __name__ == "__main__":
     args = parse_args(main_parser)
