@@ -1,13 +1,10 @@
 ROOT=$(readlink -f "$K_DIR/..")
-NVIM="$ROOT/nvim"
+export ROOT
 
-export DOT_NVIM_TESTS_WORKDIR="$K_DIR/workdir"
-export DOT_NVIM_TESTS_TARGET="$NVIM"
-export DOT_NVIM_TESTS_LOG_LEVEL=DEBUG
+#export LOG_LEVEL=DEBUG
 
 go() {
-    ./tests "$@"
-    #"$NVIM" -c ":luafile go.lua" "${1-foo.txt}"
+    make test.filetype-lua
 }
 
 deploy() {

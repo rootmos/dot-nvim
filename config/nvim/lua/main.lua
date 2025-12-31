@@ -60,6 +60,4 @@ function fileFinder()
     require("telescope.builtin").git_files()
 end
 
-if DOT_NVIM_TESTS == "sanity-check" then
-    error("make sure errors are caught")
-end
+require("tests")

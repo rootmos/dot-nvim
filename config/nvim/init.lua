@@ -13,13 +13,16 @@ else
 
     ts()
     local sc, msg = pcall(require, "main")
-    ts()
 
-    f:write(string.format("%d\n", sc and 1 or 0))
-    if not sc then
-        f:write(msg)
-    end
-    f:close()
+    vim.schedule(function()
+        ts()
 
-    vim.cmd { cmd = sc and "quit" or "cquit" }
+        f:write(string.format("%d\n", sc and 1 or 0))
+        if not sc then
+            f:write(msg)
+        end
+        f:close()
+
+        vim.cmd { cmd = sc and "quit" or "cquit" }
+    end)
 end

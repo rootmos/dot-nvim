@@ -8,4 +8,4 @@ ROOT=$(readlink -f "$0" | xargs dirname)
 
 "$ROOT/nvim" --headless "+Lazy! sync" +qa
 
-"$ROOT/dev/tests"
+make -C "$ROOT" tests
