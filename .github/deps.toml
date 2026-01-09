@@ -4,9 +4,9 @@ debian = [ "build-essential", "ca-certificates", "cmake" ]
 ubuntu = [ "build-essential", "ca-certificates", "cmake" ]
 
 [runtime]
-arch = [ "git" ]
-ubuntu = [ "git", "ca-certificates" ]
-debian = [ "git", "ca-certificates" ]
+arch = [ "git", "gcc" ]
+ubuntu = [ "git", "ca-certificates", "gcc" ]
+debian = [ "git", "ca-certificates", "gcc" ]
 
 [tests]
 arch = [ "expect" ]
