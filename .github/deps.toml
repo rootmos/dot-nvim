@@ -1,6 +1,6 @@
 [build]
 arch = [ "base-devel", "cmake" ]
-alpine = [ "build-base", "cmake" ]
+alpine = [ "build-base", "cmake", "libvterm" ]
 debian = [ "build-essential", "ca-certificates", "cmake" ]
 ubuntu = [ "build-essential", "ca-certificates", "cmake" ]
 
