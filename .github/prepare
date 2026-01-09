@@ -5,18 +5,12 @@ set -o nounset -o errexit
 SUDO=${SUDO-}
 DISTRO=${DISTRO-}
 UPDATE=${UPDATE-}
-BUILD=${BUILD-}
-RUNTIME=${RUNTIME-}
-TESTS=${TESTS-}
 while getopts "ud:sS:brt-" OPT; do
     case $OPT in
         d) DISTRO=$OPTARG ;;
         u) UPDATE=1 ;;
         s) SUDO=sudo ;;
         S) SUDO=$OPTARG ;;
-        b) BUILD=1 ;;
-        r) RUNTIME=1 ;;
-        t) TESTS=1 ;;
         -) break ;;
         ?) usage 2 ;;
     esac

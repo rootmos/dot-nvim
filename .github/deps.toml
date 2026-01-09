@@ -1,0 +1,9 @@
+[build]
+arch = [ "base-devel" ]
+alpine = [ "build-base" ]
+debian = [ "build-essential" ]
+ubuntu = [ "build-essential" ]
+
+[runtime]
+
+[tests]
