@@ -27,7 +27,7 @@ WORKDIR=$(readlink -f "$WORKDIR")
 
 cd "$WORKDIR"
 
-TARBALL=nvim-$VERSION.tar.gz
+TARBALL=nvim-v$VERSION.tar.gz
 $FETCH --manifest-filename="$SCRIPT_DIR/nvim.json" download "$TARBALL" >/dev/null
 
 tar xf "$TARBALL"

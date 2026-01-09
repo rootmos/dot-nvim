@@ -6,6 +6,6 @@ ROOT=$(readlink -f "$0" | xargs dirname)
 
 "$ROOT/build/latest.sh"
 
-"$ROOT/nvim" --headless "+Lazy! sync" +qa
+make -C "$ROOT" sync
 
 make -C "$ROOT" tests
