@@ -6,6 +6,6 @@ ROOT=$(readlink -f "$0" | xargs dirname)
 
 "$ROOT/build/latest.sh"
 
-make -C "$ROOT" sync
+"$ROOT/sync"
 
 make -C "$ROOT" tests

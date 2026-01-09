@@ -9,7 +9,7 @@ FETCH=$SCRIPT_DIR/fetch
 CURRENT=$(<"$ROOT/version")
 LATEST=$(gh release list --exclude-pre-releases --repo neovim/neovim --json tagName --jq 'map(.tagName) | map(select(. != "stable")) | .[0]')
 
-echo 1>&2 "current version: $CURRENT"
+echo 1>&2 "current version: v$CURRENT"
 echo 1>&2 "latest version: $LATEST"
 
 if [ -z "${WORKDIR-}" ]; then
@@ -21,7 +21,7 @@ fi
 export WORKDIR=$(readlink -f "$WORKDIR")
 cd "$WORKDIR"
 
-if [ "$CURRENT" != "$LATEST" ]; then
+if [ "v$CURRENT" != "$LATEST" ]; then
     URL="https://github.com/neovim/neovim/archive/refs/tags/$LATEST.tar.gz"
     TARBALL="nvim-$LATEST.tar.gz"
 
@@ -31,6 +31,6 @@ if [ "$CURRENT" != "$LATEST" ]; then
     echo 1>&2 "installing: $LATEST"
     "$SCRIPT_DIR/install.sh" -v "$LATEST"
 
-    echo 1>&2 "set current version: $LATEST"
+    echo 1>&2 "set current version: v$LATEST"
     echo "$LATEST" >"$ROOT/version"
 fi

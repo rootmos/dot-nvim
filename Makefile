@@ -7,7 +7,3 @@ tests:
 .PHONY: build
 build:
 	build/install.sh
-
-.PHONY: sync
-sync:
-	./nvim --headless "+Lazy! sync" +qa
