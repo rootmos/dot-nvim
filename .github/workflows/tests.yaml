@@ -60,6 +60,8 @@ jobs:
 
     - name: Install plugins
       run: ./sync
+      env:
+        DOT_NVIM_ME:
 
 
     #- name: Install test dependencies
