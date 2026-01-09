@@ -55,11 +55,11 @@ jobs:
       run: make build
 
 
-    #- name: Install runtime dependencies
-      #run: .github/deps -r
+    - name: Install runtime dependencies
+      run: .github/deps -r
 
-    #- name: Install plugins
-      #run: make sync
+    - name: Install plugins
+      run: make sync
 
 
     #- name: Install test dependencies
