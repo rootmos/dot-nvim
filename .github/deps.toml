@@ -1,8 +1,8 @@
 [build]
-arch = [ "base-devel" ]
-alpine = [ "build-base" ]
-debian = [ "build-essential" ]
-ubuntu = [ "build-essential" ]
+arch = [ "base-devel", "cmake" ]
+alpine = [ "build-base", "cmake" ]
+debian = [ "build-essential", "ca-certificates", "cmake" ]
+ubuntu = [ "build-essential", "ca-certificates", "cmake" ]
 
 [runtime]
 

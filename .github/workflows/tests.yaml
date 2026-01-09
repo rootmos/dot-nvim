@@ -31,8 +31,8 @@ jobs:
     - name: Install dependencies
       run: .github/deps -b
 
-    #- name: Build
-    #  run: make build
+    - name: Build
+      run: make build
 
     #- name: Run tests
     #  run: make tests
