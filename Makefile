@@ -6,4 +6,4 @@ tests:
 
 .PHONY: build
 build:
-	build/build.sh
+	build/install.sh

@@ -1,0 +1,24 @@
+name: Build and run tests
+on:
+  push:
+#  schedule:
+#    - cron: "0 0 * * *"
+
+jobs:
+  tests:
+    strategy:
+      matrix:
+        #distro: [ "alpine:latest", "ubuntu:latest", "archlinux:latest" ]
+        distro: [ "archlinux:latest" ]
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.distro }}
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    - name: Build
+      run: make build
+
+    - name: Run tests
+      run: make tests
