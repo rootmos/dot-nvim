@@ -9,8 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        distro: [ "archlinux:latest", "alpine:latest", "debian:latest", "ubuntu:latest" ]
-        #distro: [ "archlinux:latest" ]
+        distro: [ "archlinux:latest", "debian:latest", "ubuntu:latest" ]
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix.distro }}
@@ -29,10 +28,10 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Install dependencies
-      run: .github/deps -b
+      run: .github/deps -brt
 
     - name: Build
       run: make build
 
-    #- name: Run tests
-    #  run: make tests
+    - name: Run tests
+      run: make tests
