@@ -1,0 +1,34 @@
+name: Tests
+on:
+  push:
+#  schedule:
+#    - cron: "0 0 * * *"
+
+jobs:
+  tests:
+    strategy:
+      matrix:
+        distro: [ "archlinux:latest", "alpine:latest", "debian:latest", "ubuntu:latest" ]
+        #distro: [ "archlinux:latest" ]
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.distro }}
+    steps:
+    - name: Check out preparation files
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+        sparse-checkout: .github
+        sparse-checkout-cone-mode: false
+
+    - name: Prepare build environment
+      run: .github/prepare.sh -u
+
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    #- name: Build
+    #  run: make build
+
+    #- name: Run tests
+    #  run: make tests

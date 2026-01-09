@@ -1,0 +1,82 @@
+#!/bin/sh
+
+set -o nounset -o errexit
+
+SUDO=${SUDO-}
+DISTRO=${DISTRO-}
+UPDATE=${UPDATE-}
+BUILD=${BUILD-}
+RUNTIME=${RUNTIME-}
+TESTS=${TESTS-}
+while getopts "ud:sS:brt-" OPT; do
+    case $OPT in
+        d) DISTRO=$OPTARG ;;
+        u) UPDATE=1 ;;
+        s) SUDO=sudo ;;
+        S) SUDO=$OPTARG ;;
+        b) BUILD=1 ;;
+        r) RUNTIME=1 ;;
+        t) TESTS=1 ;;
+        -) break ;;
+        ?) usage 2 ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ -z "$DISTRO" ]; then
+    if command -v lsb_release >/dev/null; then
+        DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
+    elif command -v pacman >/dev/null; then
+        DISTRO="arch"
+    elif command -v apk >/dev/null; then
+        DISTRO="alpine"
+    elif command -v apt-get >/dev/null; then
+        DISTRO="ubuntu"
+    else
+        echo "unable to figure out distribution: $DISTRO" 1>&2
+        exit 1
+    fi
+fi
+echo "distro: $DISTRO" 1>&2
+
+BOOTSTRAP=
+
+if ! command -v bash >/dev/null; then
+    BOOTSTRAP="$BOOTSTRAP bash"
+fi
+
+if ! command -v python >/dev/null; then
+    case "$DISTRO" in
+        arch) BOOTSTRAP="$BOOTSTRAP python" ;;
+        *) BOOTSTRAP="$BOOTSTRAP python3" ;;
+    esac
+fi
+
+if [ -n "$UPDATE" ]; then
+    case "$DISTRO" in
+        arch)
+            $SUDO pacman -Sy 1>&2
+            $SUDO pacman -S pacman --noconfirm 1>&2
+            ;;
+        alpine)
+            $SUDO apk update 1>&2
+            ;;
+        debian | ubuntu)
+            $SUDO apt-get update 1>&2
+            ;;
+    esac
+fi
+
+if [ -n "$BOOTSTRAP" ]; then
+    case "$DISTRO" in
+        arch)
+            $SUDO pacman -S --noconfirm $BOOTSTRAP 1>&2
+            ;;
+        alpine)
+            $SUDO apk add $BOOTSTRAP 1>&2
+            ;;
+        debian | ubuntu)
+            $SUDO apt-get install --yes --no-install-recommends --no-install-suggests $BOOTSTRAP 1>&2
+            ;;
+    esac
+fi
