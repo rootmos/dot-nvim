@@ -50,7 +50,7 @@ if [ -n "$UPDATE" ]; then
     case "$DISTRO" in
         arch)
             $SUDO pacman -Sy 1>&2
-            $SUDO pacman -S pacman --noconfirm 1>&2
+            $SUDO pacman -S pacman --noconfirm --needed 1>&2
             ;;
         alpine)
             $SUDO apk update 1>&2
@@ -64,7 +64,7 @@ fi
 if [ -n "$BOOTSTRAP" ]; then
     case "$DISTRO" in
         arch)
-            $SUDO pacman -S --noconfirm $BOOTSTRAP 1>&2
+            $SUDO pacman -S --noconfirm --needed $BOOTSTRAP 1>&2
             ;;
         alpine)
             $SUDO apk add $BOOTSTRAP 1>&2

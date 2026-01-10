@@ -9,6 +9,15 @@ ubuntu = [ "git", "ca-certificates", "gcc" ]
 debian = [ "git", "ca-certificates", "gcc" ]
 
 [tests]
-arch = [ "expect" ]
-ubuntu = [ "expect" ]
-debian = [ "expect" ]
+arch = [
+    "make",
+    "expect",
+]
+ubuntu = [
+    "make",
+    "expect",
+]
+debian = [
+    "make",
+    "expect",
+]

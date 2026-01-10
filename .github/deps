@@ -121,7 +121,7 @@ def main(args):
 
     match distro:
         case "arch":
-            cmdline = [ "pacman", "-S", "--noconfirm" ]
+            cmdline = [ "pacman", "-S", "--noconfirm", "--needed" ]
         case "alpine":
             cmdline = [ "apk", "add" ]
         case "ubuntu" | "debian":
