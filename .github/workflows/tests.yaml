@@ -62,8 +62,8 @@ jobs:
       run: ./sync
 
 
-    #- name: Install test dependencies
-      #run: .github/deps -t
+    - name: Install test dependencies
+      run: .github/deps -t
 
-    #- name: Run tests
-      #run: make tests
+    - name: Run tests
+      run: make tests
