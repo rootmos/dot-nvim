@@ -38,13 +38,12 @@ jobs:
       run: echo "version=$(cat version)" >> "$GITHUB_OUTPUT"
 
 
-    - name: Cache Neovim build
+    - name: Restore cached Neovim build
       id: cache-neovim
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v4
       with:
-          path: |
-              root/${{ steps.neovim.outputs.version }}
-          key: ${{ matrix.distro }}_${{ steps.date.outputs.date }}_${{ steps.neovim.outputs.version }}
+        path: root/${{ steps.neovim.outputs.version }}
+        key: ${{ matrix.distro }}_${{ steps.date.outputs.date }}_${{ steps.neovim.outputs.version }}
 
     - name: Install build dependencies
       if: steps.cache-neovim.outputs.cache-hit != 'true'
@@ -53,6 +52,17 @@ jobs:
     - name: Build
       if: steps.cache-neovim.outputs.cache-hit != 'true'
       run: make build
+
+    - name: Remove build dependencies
+      if: steps.cache-neovim.outputs.cache-hit != 'true'
+      run: .github/deps -b -R
+
+    - name: Save Neovim build
+      if: steps.cache-neovim.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: root/${{ steps.neovim.outputs.version }}
+        key: ${{ steps.cache-neovim.outputs.cache-primary-key }}
 
 
     - name: Install runtime dependencies
