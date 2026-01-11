@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix.distro }}:latest
+    env:
+      TESTS_WORKDIR: /tmp/tests
     steps:
     # https://stackoverflow.com/a/60942437
     - name: Get current date
@@ -77,3 +79,12 @@ jobs:
 
     - name: Run tests
       run: make tests
+      env:
+        DOT_NVIM_TESTS_WORKDIR: "${{ env.TESTS_WORKDIR }}/tests-${{ matrix.distro }}_${{ steps.date.outputs.date }}_${{ steps.neovim.outputs.version }}_${{ github.run_id }}"
+
+    - name: Keep test artifacts
+      if: success() || failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: "tests-${{ matrix.distro }}_${{ steps.date.outputs.date }}_${{ steps.neovim.outputs.version }}_${{ github.run_id }}"
+        path: "${{ env.TESTS_WORKDIR }}"
