@@ -129,17 +129,19 @@ def main(args):
             else:
                 cmdline += [ "-R", "--recursive" ]
             cmdline += [ "--noconfirm" ]
-
         case "alpine":
-            cmdline = [ "apk" , "add" if not args.remove else "del" ]
+            cmdline = [ "apk" ]
+            if not args.remove:
+                cmdline += [ "add" ]
+            else:
+                cmdline += [ "del", "--rdepends" ]
         case "ubuntu" | "debian":
-            cmdline = [ "apt-get" ]
+            cmdline = [ "apt-get", "--yes" ]
             if not args.remove:
                 cmdline += [ "install" ]
                 cmdline += [ "--no-install-recommends", "--no-install-suggests" ]
             else:
-                cmdline += [ "remove" ]
-            cmdline += [ "--yes" ]
+                cmdline += [ "remove", "--auto-remove" ]
         case _:
             raise RuntimeError(f"unsupported distribution: {distro}")
 
