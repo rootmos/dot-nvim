@@ -24,7 +24,7 @@ mkdir -p "$DOCKER_CONTEXT"
 git -C "$ROOT" archive \
     --format=tar --worktree-attributes \
     HEAD \
-    | tar -xvf- -C "$DOCKER_CONTEXT"
+    | tar -xf- -C "$DOCKER_CONTEXT"
 
 DOCKER_IMAGE_ID_FILE="$WORKDIR/iid"
 $SUDO $DOCKER build --progress=plain \

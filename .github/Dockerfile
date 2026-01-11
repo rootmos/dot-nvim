@@ -14,7 +14,11 @@ WORKDIR /workdir
 ADD build build
 ADD version version
 RUN build/install.sh
+RUN /gha/deps -b -R
 
 RUN /gha/deps -r
 ADD . .
 RUN ./sync
+
+RUN /gha/deps -t
+RUN make tests

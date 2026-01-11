@@ -60,7 +60,7 @@ def parse_args(build: Callable[[], argparse.ArgumentParser]) -> argparse.Namespa
     return main_parser.parse_args()
 
 def figure_out_distribution() -> str:
-    lsb_release = shutil.which("lsb_releasae")
+    lsb_release = shutil.which("lsb_release")
     if lsb_release is not None:
         [l] = subprocess.check_output([lsb_release, "-is"], text=True).splitlines()
         distro = l.rstrip().lower()
@@ -87,6 +87,7 @@ def main_parser() -> argparse.ArgumentParser:
     parser.add_argument("--distro", default=env("DISTRO"), help="target distribution")
 
     parser.add_argument("-n", "--dry-run", action="store_true")
+    parser.add_argument("-R", "--remove", action="store_true")
 
     targets = parser.add_argument_group("targets")
     targets.add_argument("-b", "--build", dest="targets", action="append_const", const="build")
@@ -108,30 +109,48 @@ def main(args):
     for target in args.targets or []:
         deps.update(manifest.get(target, {}).get(distro, []))
         deps.update(manifest.get(distro, {}).get(target, []))
+    deps = sorted(list(deps))
+
+    if not args.remove:
+        op = "install"
+    else:
+        op = "remove"
+
+    if not deps:
+        logger.info("no dependencies to %s", op)
+        return
+    logger.info("%s: %s", op, ' '.join(deps))
+
+    match distro:
+        case "arch":
+            cmdline = [ "pacman" ]
+            if not args.remove:
+                cmdline += [ "-S", "--needed" ]
+            else:
+                cmdline += [ "-R", "--recursive" ]
+            cmdline += [ "--noconfirm" ]
+
+        case "alpine":
+            cmdline = [ "apk" , "add" if not args.remove else "del" ]
+        case "ubuntu" | "debian":
+            cmdline = [ "apt-get" ]
+            if not args.remove:
+                cmdline += [ "install" ]
+                cmdline += [ "--no-install-recommends", "--no-install-suggests" ]
+            else:
+                cmdline += [ "remove" ]
+            cmdline += [ "--yes" ]
+        case _:
+            raise RuntimeError(f"unsupported distribution: {distro}")
+
+    cmdline += deps
 
     if args.dry_run:
+        logger.debug("dry-run: %s", cmdline)
         for d in deps:
             print(d)
         return
 
-    if not deps:
-        logger.info("no dependencies to install")
-        return
-    logger.info("installing: %s", deps)
-
-    match distro:
-        case "arch":
-            cmdline = [ "pacman", "-S", "--noconfirm", "--needed" ]
-        case "alpine":
-            cmdline = [ "apk", "add" ]
-        case "ubuntu" | "debian":
-            cmdline = [ "apt-get", "install", "--yes" ]
-            cmdline += [ "--no-install-recommends", "--no-install-suggests" ]
-        case _:
-            raise RuntimeError(f"unsupported distribution: {distro}")
-    logger.debug("package installer: %s", cmdline)
-
-    cmdline += list(deps)
     logger.debug("running: %s", cmdline)
     subprocess.check_call(cmdline)
 
