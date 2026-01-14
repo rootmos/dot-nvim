@@ -7,4 +7,4 @@ SCRIPT_DIR=$(readlink -f "$0" | xargs dirname)
 export DOT_NVIM_ME=
 
 #exec "$SCRIPT_DIR/nvim" --headless "+Lazy! sync" +qa
-"$SCRIPT_DIR/nvim" --headless -S "$SCRIPT_DIR/sync.lua" | cat
+exec "$SCRIPT_DIR/nvim" --headless -S "$SCRIPT_DIR/sync.lua"

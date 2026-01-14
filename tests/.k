@@ -1,10 +1,11 @@
 ROOT=$(readlink -f "$K_DIR/..")
 export ROOT
 
-#export LOG_LEVEL=DEBUG
+export DOT_NVIM_TESTS_LOG_LEVEL=DEBUG
 
 go() {
-    make test.filetype-lua
+    #make test.filetype-lua
+    ./run --interactive --main
 }
 
 deploy() {
