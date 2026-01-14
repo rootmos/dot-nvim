@@ -95,7 +95,7 @@ def main(args, workdir):
     elif args.sanity_check:
         test_case = "sanity-check"
     elif args.filetype:
-        test_case = "ft:" + args.filetype
+        test_case = "ft-" + args.filetype
     else:
         raise NotImplementedError()
     logger.info("test-case: %s", test_case)
@@ -103,7 +103,7 @@ def main(args, workdir):
     logger.debug("workdir: %s", workdir)
     ts = datetime.now(UTC).strftime("%y%m%dT%H%M%SZ")
     salt = fresh_salt()
-    testdir = os.path.join(workdir, f"{ts}-{test_case}-{salt}")
+    testdir = os.path.join(workdir, f"{ts}_{test_case}_{salt}")
     logger.info("testdir: %s", testdir)
     os.makedirs(testdir)
 
