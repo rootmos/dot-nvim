@@ -75,7 +75,9 @@ def main_parser() -> argparse.ArgumentParser:
 
     parser.add_argument("-w", "--workdir", default=env("WORKDIR"), help="workdir")
     parser.add_argument("-q", "--quiet", action="store_true")
+
     parser.add_argument("--timeout", type=float, default=2.0)
+    parser.add_argument("-I", "--interactive", action="store_true")
 
     default_target = os.path.realpath(os.path.join(SCRIPT_DIR, "..", "nvim"))
     parser.add_argument("-t", "--target", default=env("TARGET", default_target), help="neovim target")
@@ -93,7 +95,7 @@ def main(args, workdir):
     elif args.sanity_check:
         test_case = "sanity-check"
     elif args.filetype:
-        test_case = "ft:" + args.filetype
+        test_case = "ft-" + args.filetype
     else:
         raise NotImplementedError()
     logger.info("test-case: %s", test_case)
@@ -101,48 +103,115 @@ def main(args, workdir):
     logger.debug("workdir: %s", workdir)
     ts = datetime.now(UTC).strftime("%y%m%dT%H%M%SZ")
     salt = fresh_salt()
-    testdir = os.path.join(workdir, f"{ts}-{test_case}-{salt}")
+    testdir = os.path.join(workdir, f"{ts}_{test_case}_{salt}")
     logger.info("testdir: %s", testdir)
     os.makedirs(testdir)
 
     result_path = os.path.join(testdir, "result")
+    messages_path = os.path.join(testdir, "messages")
     env = {
         "DOT_NVIM_TESTS": test_case,
         "DOT_NVIM_TESTS_RESULT_PATH": result_path,
+        "DOT_NVIM_MESSAGES": messages_path,
+        "DOT_NVIM_ME": "",
         **os.environ
     }
 
     if args.sanity_check:
         env["DOT_NVIM_TESTS_SANITY_CHECK"] = "1"
 
-    unbuffer = shutil.which("unbuffer")
-    assert unbuffer is not None
+    cmdline = []
+    kwargs = {
+        "cwd": testdir,
+        "env": env,
+        "check": False,
+    }
 
-    tty = os.path.join(testdir, "tty")
+    if not args.interactive:
+        unbuffer = shutil.which("unbuffer")
+        assert unbuffer is not None
+        cmdline += [ unbuffer ]
 
-    cmdline = [ unbuffer ]
+        kwargs["stdin"] = subprocess.DEVNULL
+        tty = os.path.join(testdir, "tty")
+        kwargs["stdout"] = open(tty, "wb")
+
+        kwargs["timeout"] = args.timeout
+
     cmdline += [ args.target ]
-    with open(tty, "wb") as f:
-        p = subprocess.run(cmdline, cwd=testdir, env=env, timeout=args.timeout, stdout=f, check=False)
+    p = subprocess.run(cmdline, **kwargs)
 
     with open(result_path) as f:
-        ls = f.readlines()
-    ls = [ l.rstrip() for l in ls ]
+        ls = [ l.rstrip() for l in f.readlines() ]
     result = bool(int(ls[2]))
     logger.info("result: %s", result)
     main_time = (float(ls[1]) - float(ls[0]))*1e3
     logger.info("main.lua duration: %fms", main_time)
-    msg = ls[3:]
-    logger.debug("message: %s", msg)
 
+    error = ls[3:]
+    logger.debug("pcall(main) error: %s", error)
+    if error:
+        if not args.quiet:
+            for l in error:
+                print(l)
+
+    with open(messages_path) as f:
+        messages = [ l.rstrip() for l in f.readlines() ]
+    logger.debug("messages: %s", messages)
     if not args.quiet:
-        for l in msg:
+        for l in messages:
             print(l)
 
-    if not args.sanity_check:
-        return p.returncode == 0
+    good = []
+    bad = []
+
+    expected_returncode = 0 if not args.sanity_check else 1
+    if p.returncode == expected_returncode:
+        good.append(f"correct exit status: {p.returncode} == {expected_returncode}")
     else:
-        return p.returncode == 1
+        bad.append(f"unexpected exit status: {p.returncode} != {expected_returncode}")
+
+    if len(messages) == 0:
+        good.append(f"no messages")
+    else:
+        bad.append(f"too noisy")
+
+    if not args.sanity_check:
+        if result:
+            good.append(f"main.lua returned")
+        else:
+            bad.append(f"main.lua errored")
+
+        if len(error) == 0:
+            good.append(f"main.lua didn't raise any errors")
+        else:
+            bad.append(f"main.lua raised error")
+    else:
+        if not result:
+            good.append(f"main.lua errored as expected")
+        else:
+            bad.append(f"main.lua returned unexpectedly")
+
+        if len(error) == 1 and error[0].endswith("make sure errors are caught"):
+            good.append(f"main.lua raised the expected error")
+        else:
+            bad.append(f"main.lua did not raise the expected error: {error}")
+
+    if not bad:
+        logger.info("OK:")
+        verdict = True
+        report = logging.INFO
+    else:
+        logger.error("FAIL:")
+        verdict = False
+        report = logging.ERROR
+
+    for c in good:
+        logger.log(report, "  +" + c)
+    for c in bad:
+        logger.log(report, "  -" + c)
+
+    return verdict
 
 if __name__ == "__main__":
     args = parse_args(main_parser)

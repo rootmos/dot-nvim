@@ -5,18 +5,27 @@ vim.opt_local.wrap = true
 
 vim.b.yank = { "paragraph", "word" }
 
-local longLines = true -- i.e. default is short lines
-function toggleLongLines()
-    longLines = not longLines
+local longLines
+function toggleLongLines(init)
+    if init then
+        longLines = false -- i.e. default is short lines
+    else
+        longLines = not longLines
+    end
+
     if longLines then
         vim.opt_local.textwidth = 1073741824
         require("overlength").disable()
-        print("long lines")
+        if not init then
+            print("long lines")
+        end
     else
         vim.opt_local.textwidth = 72
         require("overlength").enable()
-        print("short lines")
+        if not init then
+            print("short lines")
+        end
     end
 end
-toggleLongLines()
+toggleLongLines(true)
 vim.keymap.set("n", "<leader>l", toggleLongLines)

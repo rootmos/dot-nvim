@@ -1,9 +1,9 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
+        build = ":TSUpdateSync",
         config = function()
-            require("nvim-treesitter.configs").setup {
+            require("nvim-treesitter.config").setup {
                 highlight = {
                     enable = true,
                     additional_vim_regex_highlighting = false,

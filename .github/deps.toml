@@ -1,0 +1,23 @@
+[build]
+arch = [ "base-devel", "cmake" ]
+debian = [ "build-essential", "ca-certificates", "cmake" ]
+ubuntu = [ "build-essential", "ca-certificates", "cmake" ]
+
+[runtime]
+arch = [ "git", "gcc" ]
+ubuntu = [ "git", "ca-certificates", "gcc" ]
+debian = [ "git", "ca-certificates", "gcc" ]
+
+[tests]
+arch = [
+    "make",
+    "expect",
+]
+ubuntu = [
+    "make",
+    "expect",
+]
+debian = [
+    "make",
+    "expect",
+]

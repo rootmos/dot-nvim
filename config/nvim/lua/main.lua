@@ -40,7 +40,8 @@ function resetTabs(t)
 end
 resetTabs(4)
 
-require("me")
+me = require("me")
+
 require("config.lazy")
 require("filetypes")
 require("K")

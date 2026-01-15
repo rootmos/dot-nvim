@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -o nounset -o pipefail -o errexit
+
+SCRIPT_DIR=$(readlink -f "$0" | xargs dirname)
+
+if [ -z "${WORKDIR-}" ]; then
+    WORKDIR=$(mktemp -d)
+    trap 'rm -rf $WORKDIR' EXIT
+else
+    mkdir -p "$WORKDIR"
+fi
+WORKDIR=$(readlink -f "$WORKDIR")
+cd "$WORKDIR"
+
+MODE=${1-install}
+if [ "$MODE" = "update" ]; then
+    MODE=sync
+fi
+
+cat <<EOF >"$WORKDIR/go.lua"
+local ok, msg = pcall(require("lazy").$MODE, {
+    wait = true,
+    concurrency = 1,
+    show = true,
+})
+
+if not ok then
+    print(msg)
+end
+
+vim.cmd { cmd = ok and "quit" or "cquit" }
+EOF
+
+export DOT_NVIM_ME=
+export DOT_NVIM_MESSAGES="$WORKDIR/messages"
+
+"$SCRIPT_DIR/nvim" --headless -S "$WORKDIR/go.lua"
