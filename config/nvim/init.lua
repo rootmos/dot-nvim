@@ -1,3 +1,25 @@
+do
+    local path = os.getenv("DOT_NVIM_MESSAGES")
+    if path then
+        local super = vim.notify
+
+        local f = io.open(path, "a+")
+        vim.notify = function(msg, level, opts)
+            f:write(os.date("%Y-%m-%dT%H:%M:%S%z"))
+            f:write(" ")
+            f:write(msg)
+            f:write("\n")
+            f:flush()
+
+            return super(msg, level, opts)
+        end
+
+        function print(...)
+            vim.notify(vim.inspect(...))
+        end
+    end
+end
+
 DOT_NVIM_TESTS = os.getenv("DOT_NVIM_TESTS")
 if not DOT_NVIM_TESTS then
     return require("main")
@@ -10,14 +32,6 @@ local function ts()
     f:write(string.format("%d.%09d\n", rt["sec"], rt["nsec"]))
     f:flush()
 end
-
-local messages = io.open(os.getenv("DOT_NVIM_TESTS_MESSAGES_PATH"), "w")
-vim.notify = function(msg, level, opts)
-    messages:write(msg)
-    messages:write("\n")
-    messages:flush()
-end
-vim.notify_once = vim.notify
 
 ts()
 local sc, msg = pcall(require, "main")

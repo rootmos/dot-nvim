@@ -112,7 +112,7 @@ def main(args, workdir):
     env = {
         "DOT_NVIM_TESTS": test_case,
         "DOT_NVIM_TESTS_RESULT_PATH": result_path,
-        "DOT_NVIM_TESTS_MESSAGES_PATH": messages_path,
+        "DOT_NVIM_MESSAGES": messages_path,
         "DOT_NVIM_ME": "",
         **os.environ
     }

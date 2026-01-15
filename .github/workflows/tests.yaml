@@ -1,6 +1,7 @@
 name: Tests
 on:
   push:
+  workflow_dispatch:
 #  schedule:
 #    - cron: "0 0 * * *"
 
@@ -71,7 +72,7 @@ jobs:
       run: .github/deps -r
 
     - name: Install plugins
-      run: ./sync
+      run: ./plugins install
 
 
     - name: Install test dependencies
