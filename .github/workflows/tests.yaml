@@ -23,9 +23,8 @@ jobs:
       run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
     - name: Check out preparation files
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
-        fetch-depth: 1
         sparse-checkout: .github/prepare
         sparse-checkout-cone-mode: false
 
@@ -34,7 +33,7 @@ jobs:
 
 
     - name: Check out repository code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Extract current Neovim version
       id: neovim
@@ -71,16 +70,18 @@ jobs:
     - name: Install runtime dependencies
       run: .github/deps -r
 
-    - name: Install/update plugins
-      run: ./plugins ${{ github.event.schedule && 'update' || 'install' }}
+    - name: ${{ github.event_name == 'schedule' && 'Update' || 'Install' }} plugins
+      run: ./plugins ${{ github.event_name == 'schedule' && 'update' || 'install' }}
 
     - name: Keep changes
-      if: success() || failure()
+      if: (success() || failure()) && matrix.distro != 'ubuntu' # TODO why doesn't actions/checkout + git diff work on ubuntu?
       run: |
         mkdir -p "${{ env.ARTIFACT_ROOT }}/${{ env.ARTIFACT }}"
-        git diff | tee "${{ env.ARTIFACT_ROOT }}/${{ env.ARTIFACT }}/plugins.patch"
+        git config --global --add safe.directory .
+        git diff --output="${{ env.ARTIFACT_ROOT }}/${{ env.ARTIFACT }}/${{ github.job }}.patch"
+        cat "${{ env.ARTIFACT_ROOT }}/${{ env.ARTIFACT }}/${{ github.job }}.patch"
       env:
-        ARTIFACT: &artifact "tests_${{ matrix.distro }}_${{ steps.date.outputs.date }}_${{ steps.neovim.outputs.version }}_${{ github.run_id }}"
+        ARTIFACT: &artifact "${{ github.job }}_${{ matrix.distro }}_${{ steps.date.outputs.date }}_${{ steps.neovim.outputs.version }}_${{ github.run_id }}"
 
     - name: Install test dependencies
       run: .github/deps -t

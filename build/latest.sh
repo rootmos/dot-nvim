@@ -18,11 +18,12 @@ shift $((OPTIND-1))
 
 CURRENT=$(<"$ROOT/version")
 LATEST=$(gh release list --exclude-pre-releases --repo neovim/neovim --json tagName --jq 'map(.tagName) | map(select(. != "stable")) | .[0]')
+LATEST=${LATEST/#v}
 
-echo 1>&2 "current version: v$CURRENT"
+echo 1>&2 "current version: $CURRENT"
 echo 1>&2 "latest version: $LATEST"
 
-if [ "v$CURRENT" == "$LATEST" ]; then
+if [ "$CURRENT" == "$LATEST" ]; then
     exit 0
 fi
 
@@ -36,8 +37,8 @@ WORKDIR=$(readlink -f "$WORKDIR")
 export WORKDIR
 cd "$WORKDIR"
 
-URL="https://github.com/neovim/neovim/archive/refs/tags/$LATEST.tar.gz"
-TARBALL="nvim-$LATEST.tar.gz"
+URL="https://github.com/neovim/neovim/archive/refs/tags/v$LATEST.tar.gz"
+TARBALL="nvim-v$LATEST.tar.gz"
 
 echo 1>&2 "fetching: $URL"
 $FETCH --root="$WORKDIR" --manifest-filename="$SCRIPT_DIR/nvim.json" add "$URL" "$TARBALL"
@@ -50,6 +51,6 @@ fi
 echo 1>&2 "set current version: v$LATEST"
 echo "$LATEST" >"$ROOT/version"
 
-if [ -z "$SKIP_BUILD" ]; then
+if [ -n "$SKIP_BUILD" ]; then
     exit 1
 fi

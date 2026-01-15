@@ -17,7 +17,7 @@ jobs:
       run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
     - name: Check out repository code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Check latest Neovim version
       run: build/latest.sh -B
@@ -33,9 +33,10 @@ jobs:
       if: success() || failure()
       run: |
         mkdir -p "${{ env.ARTIFACT_ROOT }}/${{ env.ARTIFACT }}"
-        git diff | tee "${{ env.ARTIFACT_ROOT }}/${{ env.ARTIFACT }}/latest.patch"
+        git diff --output="${{ env.ARTIFACT_ROOT }}/${{ env.ARTIFACT }}/${{ github.job }}.patch"
+        cat "${{ env.ARTIFACT_ROOT }}/${{ env.ARTIFACT }}/${{ github.job }}.patch"
       env:
-        ARTIFACT: &artifact "latest_${{ steps.date.outputs.date }}_${{ steps.neovim.outputs.version }}_${{ github.run_id }}"
+        ARTIFACT: &artifact "${{ github.job }}_${{ steps.date.outputs.date }}_${{ steps.neovim.outputs.version }}_${{ github.run_id }}"
 
     - name: Keep artifacts
       if: success() || failure()

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-# 2024-07-23T21:40:58+02:00 SHA-256:97cec15520d25d7869cae8c04fd5b179fa2a1636f638e12b15992d770eb7a8c3
+# 2026-01-15T06:15:10+01:00 SHA-256:e760362a7ea2e4f89f658c5f7d109289cd928040638f286ea1a47841aa7f0407
 
 import argparse
+import contextlib
 import datetime
 import hashlib
 import json
 import os
-import shutil
-import sys
 import stat
+import sys
 import urllib.request
 
 import logging
@@ -29,7 +29,7 @@ def figure_out_version():
     with open(__file__, "rb") as this:
         ls = this.readlines()
         shebang = ls[0]
-        assert(shebang.startswith(b"#!"))
+        assert shebang.startswith(b"#!")
 
         h = hashlib.sha256()
         for l in ls[1:]:
@@ -38,7 +38,7 @@ def figure_out_version():
 
 def parse_args():
     parser = argparse.ArgumentParser(
-            description="One script to fetch them all and in /tmp bind them",
+            description = "One script to fetch them all and in git bind them",
             formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument("-v", "--version", action="version", version=figure_out_version())
@@ -83,9 +83,9 @@ def setup_logger(level):
 def download(url, target=None):
     m = hashlib.sha256()
     if target is None:
-        logger.info(f"fetching: {url}")
+        logger.info("fetching: %s", url)
     else:
-        logger.info(f"fetching: {url} -> {target.name}")
+        logger.info("fetching: %s -> %s", url, target.name)
 
     hdr = {
         "User-Agent": env("USER_AGENT", whoami),
@@ -96,12 +96,12 @@ def download(url, target=None):
             bs = f.read(4096)
             if len(bs) == 0:
                 break
-            logger.debug(f"fetching; {url}: {len(bs)} bytes")
+            logger.debug("fetching; %s: %s bytes", url, len(bs))
             m.update(bs)
             if target:
                 target.write(bs)
     sha256 = m.hexdigest()
-    logger.info(f"fetched; {url}: SHA256 {sha256}")
+    logger.info("fetched; %s: SHA256 %s", url, sha256)
     return sha256
 
 def sha256_file(path):
@@ -120,12 +120,12 @@ class Manifest:
 
         self._items = {}
         if os.path.exists(self.path):
-            logger.debug(f"loading manifest: {self.path}")
-            with open(self.path, "r") as f:
+            logger.debug("loading manifest: %s", self.path)
+            with open(self.path, "r", encoding="UTF-8") as f:
                 for i in map(Item.from_dict, json.load(f)):
                     self._items[i.target] = i
         else:
-            logger.debug(f"empty manifest intended for: {self.path}")
+            logger.debug("empty manifest intended for: %s", self.path)
 
     def __contains__(self, item):
         if isinstance(item, Item):
@@ -151,8 +151,8 @@ class Manifest:
         return list(items)
 
     def save(self):
-        logger.debug(f"saving manifest: {self.path}")
-        with open(self.path, "w") as f:
+        logger.debug("saving manifest: %s", self.path)
+        with open(self.path, "w", encoding="UTF-8") as f:
             json.dump(self.to_dict(), f, sort_keys=True, indent=4)
 
 class Item:
@@ -177,16 +177,16 @@ class Item:
         try:
             with open(path, "xb") as f:
                 sha256 = download(self.url, f)
-        except FileExistsError:
+        except FileExistsError as exc:
             sha256 = sha256_file(path)
             if self.sha256 is not None:
                 if self.sha256 != sha256:
-                    raise RuntimeError(f"checksum failed", path, self.url, sha256, self.sha256)
+                    raise RuntimeError("checksum failed", path, self.url, sha256, self.sha256) from exc
             else:
                 raise
         if self.sha256 is not None:
             if self.sha256 != sha256:
-                raise RuntimeError(f"checksum failed", self.url, sha256, self.sha256)
+                raise RuntimeError("checksum failed", self.url, sha256, self.sha256)
         self.sha256 = sha256
         return self
 
@@ -198,10 +198,10 @@ class Item:
             raise RuntimeError("sha256 doesn't match manifest", sha256, self.sha256)
 
         path = self.path(root)
-        logger.debug(f"verifying: {path}")
+        logger.debug("verifying: %s", path)
         h = sha256_file(path)
         if self.sha256 != h:
-            raise RuntimeError(f"target checksum failed", path, h, self.sha256)
+            raise RuntimeError("target checksum failed", path, h, self.sha256)
         self.local = path
         return self
 
@@ -224,69 +224,92 @@ class Item:
             timestamp = datetime.datetime.fromisoformat(d["timestamp"]),
         )
 
-def main():
-    args = parse_args()
-    logger = setup_logger(args.log.upper())
-    logger.debug(f"args: {args}")
-
+def resolve_root_and_manifest(args):
     root = args.root
     if root == ".":
         root = os.getcwd()
+    logger.debug("root: %s", root)
 
     manifest_path = args.manifest
     if args.manifest is None:
         manifest_path = os.path.join(root, args.manifest_filename)
 
     manifest = Manifest(manifest_path)
+    return root, manifest
+
+def do_add(args):
+    root, manifest = resolve_root_and_manifest(args)
+
+    target = os.path.relpath(os.path.join(root, args.target), start=root)
+    if target in manifest:
+        item = manifest[target]
+        if not item.exists(root=root):
+            item = item.download(root=root)
+        item = item.verify(url=args.url, sha256=args.sha256, root=root)
+    else:
+        item = Item(url=args.url, sha256=args.sha256, target=target).download(root=root)
+        manifest.add(item)
+
+    assert item.local is not None
+    print(os.path.relpath(item.local, start=root))
+
+    manifest.save()
+
+def do_download(args):
+    root, manifest = resolve_root_and_manifest(args)
+
+    items = set()
+    if vars(args).get("target"):
+        for i in manifest.items():
+            if i.target in args.target:
+                items.add(i)
+    else:
+        items = manifest.items()
+
+    for i in items:
+        if i.exists(root=root):
+            i.verify(root=root)
+        else:
+            i.download(root=root)
+        print(os.path.relpath(i.local, start=root))
+
+def do_steal_this_script(args):
+    if args.output is None:
+        dst = contextlib.nullcontext(sys.stdout.buffer)
+    else:
+        dst = open(args.output, "wb")
+
+    with open(__file__, "rb") as src, dst as dst:
+        ls = src.readlines()
+        shebang = ls[0]
+        assert shebang.startswith(b"#!")
+        dst.write(shebang)
+
+        h = hashlib.sha256()
+        for l in ls[1:]:
+            h.update(l)
+        sha256 = h.hexdigest()
+
+        now = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+        dst.write(f"# {now} SHA-256:{sha256}\n".encode("UTF-8"))
+
+        for l in ls[1:]:
+            dst.write(l)
+
+    if args.output is not None:
+        chmod_plus_x(args.output)
+
+def main():
+    args = parse_args()
+    logger = setup_logger(args.log.upper())
+    logger.debug("args: %s", args)
 
     if args.cmd == "add":
-        target = os.path.relpath(os.path.join(root, args.target), start=root)
-        if target in manifest:
-            item = manifest[target].verify(url=args.url, sha256=args.sha256, root=root)
-        else:
-            item = Item(url=args.url, sha256=args.sha256, target=target).download(root=root)
-            manifest.add(item)
-        print(os.path.relpath(item.local, start=root))
-        manifest.save()
-    elif args.cmd == None or args.cmd == "download":
-        items = set()
-        if vars(args).get("target"):
-            for i in manifest.items():
-                if i.target in args.target:
-                    items.add(i)
-        else:
-            items = manifest.items()
-
-        for i in items:
-            if i.exists(root=root):
-                i.verify(root=root)
-            else:
-                i.download(root=root)
-            print(os.path.relpath(i.local, start=root))
+        do_add(args)
+    elif args.cmd is None or args.cmd == "download":
+        do_download(args)
     elif args.cmd == "steal-this-script":
-        dst = sys.stdout.buffer
-        if args.output is not None:
-            dst = open(args.output, "wb")
-
-        with open(__file__, "rb") as src:
-            ls = src.readlines()
-            shebang = ls[0]
-            assert(shebang.startswith(b"#!"))
-            dst.write(shebang)
-
-            h = hashlib.sha256()
-            for l in ls[1:]:
-                h.update(l)
-            sha256 = h.hexdigest()
-
-            now = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
-            dst.write(f"# {now} SHA-256:{sha256}\n".encode("UTF-8"))
-
-            for l in ls[1:]:
-                dst.write(l)
-
-        if dst != sys.stdout.buffer:
-            chmod_plus_x(dst.name)
+        do_steal_this_script(args)
     else:
         raise RuntimeError(f"unexpected command: {args.cmd}")
 
