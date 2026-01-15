@@ -1,6 +1,6 @@
 local M = {
     reg = "+",
-    wordsep = " \t,|",
+    wordsep = " \t,|()[]{}",
     modes = {
         "word",
         "paragraph",
