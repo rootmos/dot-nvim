@@ -1,5 +1,8 @@
 # .nvim
 
+[![Check latest Neovim version](https://github.com/rootmos/dot-nvim/actions/workflows/latest.yaml/badge.svg)](https://github.com/rootmos/dot-nvim/actions/workflows/latest.yaml)
+[![Tests](https://github.com/rootmos/dot-nvim/actions/workflows/tests.yaml/badge.svg)](https://github.com/rootmos/dot-nvim/actions/workflows/tests.yaml)
+
 My [Neovim](https://neovim.io/) configuration.
 
 With a way to build and install in isolation in order to comfortably:
