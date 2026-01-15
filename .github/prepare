@@ -46,6 +46,13 @@ if ! command -v python >/dev/null; then
     esac
 fi
 
+if ! command -v git >/dev/null; then
+    case "$DISTRO" in
+        arch | alpine) BOOTSTRAP="$BOOTSTRAP git" ;;
+        debian | ubuntu) BOOTSTRAP="$BOOTSTRAP git ca-certificates" ;;
+    esac
+fi
+
 if [ -n "$UPDATE" ]; then
     case "$DISTRO" in
         arch)
