@@ -2,8 +2,8 @@ name: Tests
 on:
   push:
   workflow_dispatch:
-#  schedule:
-#    - cron: "0 0 * * *"
+  schedule:
+    - cron: "0/5 0 * * *"
 
 jobs:
   tests:
@@ -71,8 +71,8 @@ jobs:
     - name: Install runtime dependencies
       run: .github/deps -r
 
-    - name: Install plugins
-      run: ./plugins install
+    - name: Install/update plugins
+      run: ./plugins ${{ github.event.schedule && 'update' || 'install' }}
 
 
     - name: Install test dependencies
