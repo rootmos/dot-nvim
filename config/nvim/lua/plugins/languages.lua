@@ -1,4 +1,4 @@
-return {
+local P = {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdateSync",
@@ -34,11 +34,26 @@ return {
             }
         end,
     },
-    { "neovimhaskell/haskell-vim" },
-    {
-        "mrcjkb/haskell-tools.nvim",
-        version = "*",
-        lazy = false,
-    },
-    "luc-tielen/telescope_hoogle",
 }
+
+local function add(ft, ps)
+    for _, p in ipairs(ps) do
+        if type(p) == "string" then
+            p = { p }
+        end
+        p.ft = ft
+        table.insert(P, p)
+    end
+end
+
+add("python", {
+    {
+        "stsewd/isort.nvim",
+        build = ":UpdateRemotePlugins",
+        config = function()
+            vim.keymap.set("n", "<leader>i", vim.cmd["Isort"])
+        end,
+    }
+})
+
+return P
