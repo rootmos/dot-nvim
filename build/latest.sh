@@ -44,8 +44,8 @@ echo 1>&2 "fetching: $URL"
 $FETCH --root="$WORKDIR" --manifest-filename="$SCRIPT_DIR/nvim.json" add "$URL" "$TARBALL"
 
 if [ -z "$SKIP_BUILD" ]; then
-    echo 1>&2 "installing: $LATEST"
-    "$SCRIPT_DIR/install.sh" -v "$LATEST"
+    echo 1>&2 "building: $LATEST"
+    "$SCRIPT_DIR/build.sh" -v "$LATEST"
 fi
 
 echo 1>&2 "set current version: v$LATEST"
