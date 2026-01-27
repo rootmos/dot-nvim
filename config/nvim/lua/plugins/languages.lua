@@ -1,7 +1,7 @@
 local P = {
     {
         "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdateSync",
+        build = ":TSUpdate",
         config = function()
             require("nvim-treesitter.config").setup {
                 highlight = {

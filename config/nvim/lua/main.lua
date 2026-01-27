@@ -45,6 +45,7 @@ me = require("me")
 require("config.lazy")
 require("filetypes")
 require("K")
+require("providers")
 
 do
     local yank = require("yank")
