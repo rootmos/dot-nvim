@@ -35,5 +35,7 @@ tar xf "$TARBALL"
 TARGET=${1-${TARGET-$ROOT/root/$VERSION}}
 
 cd "neovim-"*
-make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$TARGET"
+make -j"$(nproc)" \
+    CMAKE_BUILD_TYPE=Release \
+    CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$TARGET"
 make install
