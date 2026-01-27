@@ -1,12 +1,20 @@
 CURRENT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-tests:
+tests: build
 	$(MAKE) -C tests
 
 build:
 	build/build.sh
 
-deploy:
-	git -C $(CURRENT_DIR)/../dot-nvim pull
+install: build
+	build/spell.sh
 
-.PHONY: tests build deploy
+clean:
+	rm -rf $(CURRENT_DIR)/root $(CURRENT_DIR)/share $(CURRENT_DIR)/state
+
+deploy: tests
+	git -C $(CURRENT_DIR)/../dot-nvim pull $(CURRENT_DIR)
+	make -C $(CURRENT_DIR)/../dot-nvim install
+
+
+.PHONY: tests build install clean deploy

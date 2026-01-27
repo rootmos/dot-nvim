@@ -7,10 +7,12 @@ ROOT=$(readlink -f "$SCRIPT_DIR/..")
 FETCH=$SCRIPT_DIR/fetch
 
 VERSION="$(<"$ROOT/version")"
-while getopts "v:w:-" OPT; do
+FORCE=
+while getopts "v:w:f-" OPT; do
     case $OPT in
         v) VERSION=$OPTARG ;;
         w) WORKDIR=$OPTARG ;;
+        f) FORCE=1 ;;
         -) break ;;
         ?) exit 2 ;;
     esac
@@ -24,8 +26,17 @@ else
     mkdir -p "$WORKDIR"
 fi
 WORKDIR=$(readlink -f "$WORKDIR")
-
 cd "$WORKDIR"
+
+TARGET=${1-${TARGET-$ROOT/root/$VERSION}}
+if [ -e "$TARGET" ]; then
+    if [ -n "${FORCE-}" ]; then
+        rm -rf "$TARGET"
+    else
+        echo 1>&2 "target exists already: $TARGET"
+        exit 0
+    fi
+fi
 
 TARBALL=nvim-v$VERSION.tar.gz
 $FETCH --manifest-filename="$SCRIPT_DIR/nvim.json" download "$TARBALL" >/dev/null
