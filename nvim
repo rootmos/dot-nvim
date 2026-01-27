@@ -5,11 +5,18 @@ set -o nounset -o errexit
 ROOT=$(readlink -f "$0" | xargs dirname)
 
 export NVIM_APPNAME=nvim
-export XDG_CONFIG_HOME="$ROOT/config"
-export XDG_STATE_HOME="$ROOT/state"
-export XDG_DATA_HOME="$ROOT/share"
 export NVIM_SNIPPETS="$ROOT/snippets"
 export NVIM_SPELL="$ROOT/spell"
+
+export NVIM_OUTER_XDG_CONFIG_HOME="${XDG_CONFIG_HOME-}"
+export NVIM_OUTER_XDG_DATA_HOME="${XDG_DATA_HOME-}"
+export NVIM_OUTER_XDG_STATE_HOME="${XDG_STATE_HOME-}"
+
+export XDG_CONFIG_HOME="$ROOT/config"
+export XDG_DATA_HOME="$ROOT/share"
+export XDG_STATE_HOME="$ROOT/state"
+
+export NVIM_PYTHON_LOG_FILE="$XDG_STATE_HOME/$NVIM_APPNAME/python.log"
 
 NVIM_VERSION=${NVIM_VERSION-$(<"$ROOT/version")}
 
