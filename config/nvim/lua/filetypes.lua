@@ -9,7 +9,6 @@ vim.filetype.add {
     extension = {
         sms = "sms",
         chat = "chat",
-        twitch = "twitch",
     },
 }
 
