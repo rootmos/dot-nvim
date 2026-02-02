@@ -15,7 +15,9 @@ return {
                 end
             end, {silent = true})
 
-            require("luasnip.loaders.from_lua").lazy_load({ paths = os.getenv("NVIM_SNIPPETS") })
+            require("luasnip.loaders.from_lua").lazy_load({
+                paths = os.getenv("DOT_NVIM_SNIPPETS"),
+            })
         end,
     },
 }

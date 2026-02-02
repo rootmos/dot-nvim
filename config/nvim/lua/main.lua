@@ -42,7 +42,7 @@ resetTabs(4)
 
 me = require("me")
 
-require("env")
+--require("env")
 require("config.lazy")
 require("filetypes")
 require("K")

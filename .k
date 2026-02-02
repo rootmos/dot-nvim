@@ -1,3 +1,4 @@
 go() {
-    ./nvim -l go.lua && cat .env
+    rm -f .env
+    ./nvim -l go.lua && ([ -e .env ] && cat .env || true)
 }

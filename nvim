@@ -2,15 +2,20 @@
 
 set -o nounset -o errexit
 
+TMP=$(mktemp -d "$XDG_RUNTIME_DIR/dot-nvim.XXXX")
+trap 'rm -rf $TMP' EXIT
+chmod 0700 "$TMP"
+
+printenv --null >"$TMP/outer.env"
+
 ROOT=$(readlink -f "$0" | xargs dirname)
 
 export NVIM_APPNAME=nvim
-export NVIM_SNIPPETS="$ROOT/snippets"
-export NVIM_SPELL="$ROOT/spell"
+export NVIM_VERSION=${NVIM_VERSION-$(<"$ROOT/version")}
 
-export NVIM_OUTER_XDG_CONFIG_HOME="${XDG_CONFIG_HOME-}"
-export NVIM_OUTER_XDG_DATA_HOME="${XDG_DATA_HOME-}"
-export NVIM_OUTER_XDG_STATE_HOME="${XDG_STATE_HOME-}"
+export DOT_NVIM_RUNTIME_DIR=$TMP
+export DOT_NVIM_SNIPPETS="$ROOT/snippets"
+export DOT_NVIM_SPELL="$ROOT/spell"
 
 export XDG_CONFIG_HOME="$ROOT/config"
 export XDG_DATA_HOME="$ROOT/share"
@@ -18,6 +23,4 @@ export XDG_STATE_HOME="$ROOT/state"
 
 export NVIM_PYTHON_LOG_FILE="$XDG_STATE_HOME/$NVIM_APPNAME/python.log"
 
-NVIM_VERSION=${NVIM_VERSION-$(<"$ROOT/version")}
-
-exec "$ROOT/root/$NVIM_VERSION/bin/nvim" "$@"
+"$ROOT/root/$NVIM_VERSION/bin/nvim" "$@"

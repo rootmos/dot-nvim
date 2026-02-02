@@ -39,7 +39,7 @@ vim.api.nvim_create_autocmd("FileType", {
         local spellfile = ""
         for _, fn in ipairs{ "personal", "en", "sv" } do
             local path = vim.fs.joinpath(
-                os.getenv("NVIM_SPELL"),
+                os.getenv("DOT_NVIM_SPELL"),
                 string.format("%s.%s.add", fn, enc)
             )
 
