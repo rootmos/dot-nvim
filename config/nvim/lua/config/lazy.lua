@@ -23,4 +23,7 @@ require("lazy").setup {
     log = false,
     colors = false,
   },
+  dev = {
+    path = "~/git",
+  },
 }

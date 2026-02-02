@@ -42,6 +42,7 @@ resetTabs(4)
 
 me = require("me")
 
+require("preserve_env")
 require("config.lazy")
 require("filetypes")
 require("K")
