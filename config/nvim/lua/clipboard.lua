@@ -192,10 +192,16 @@ function M.yank(mode)
     end
 end
 
-return setmetatable(M, {
-    __call = function(N, mode)
-        return function()
-            N.yank(mode)
+function M.paste(o)
+    o = o or {}
+    local text = vim.fn.getreg(M.reg)
+    if text ~= "" then
+        local pos = pos or vim.fn.getpos(".")
+        vim.api.nvim_paste(text, false, -1)
+        if o.before then
+            vim.fn.setpos(pos)
         end
-    end,
-})
+    end
+end
+
+return M

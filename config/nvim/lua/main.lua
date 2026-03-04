@@ -49,11 +49,12 @@ require("K")
 require("providers")
 
 do
-    local yank = require("yank")
-    vim.keymap.set("n", "<leader>y", yank(1))
-    vim.keymap.set("n", "<leader>Y", yank(2))
-    vim.keymap.set("n", "<leader>p", '"' .. yank.reg .. 'p')
-    vim.keymap.set("n", "<leader>P", '"' .. yank.reg .. 'P')
+    local clipboard = require("clipboard")
+    vim.keymap.set("n", "<leader>y", function() clipboard.yank(1) end)
+    vim.keymap.set("n", "<leader>Y", function() clipboard.yank(2) end)
+    vim.keymap.set("v", "<leader>y", '"' .. clipboard.reg .. 'y') -- TODO what's the lua equivalent?
+    vim.keymap.set({"n", "i"}, "<leader>p", function() clipboard.paste {} end)
+    vim.keymap.set({"n", "i"}, "<leader>P", function() clipboard.paste { before = true } end)
 end
 
 -- https://stackoverflow.com/a/19620009
