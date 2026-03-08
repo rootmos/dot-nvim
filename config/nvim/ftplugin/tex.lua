@@ -1,2 +1,2 @@
-vim.keymap.set("i", '"', "\\enquote{")
-vim.keymap.set("i", '*', "\\emph{")
+vim.keymap.set("i", '"', "\\enquote{", { buffer = true })
+vim.keymap.set("i", '*', "\\emph{", { buffer = true })
