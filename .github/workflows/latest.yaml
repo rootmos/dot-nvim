@@ -40,7 +40,7 @@ jobs:
 
     - name: Keep artifacts
       if: success() || failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: *artifact
         path: "${{ env.ARTIFACT_ROOT }}"

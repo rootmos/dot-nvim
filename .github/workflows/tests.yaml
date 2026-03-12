@@ -42,7 +42,7 @@ jobs:
 
     - name: Restore cached Neovim build
       id: cache-neovim
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: root/${{ steps.neovim.outputs.version }}
         key: ${{ matrix.distro }}_${{ steps.date.outputs.date }}_${{ steps.neovim.outputs.version }}
@@ -61,7 +61,7 @@ jobs:
 
     - name: Save Neovim build
       if: steps.cache-neovim.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: root/${{ steps.neovim.outputs.version }}
         key: ${{ steps.cache-neovim.outputs.cache-primary-key }}
@@ -93,7 +93,7 @@ jobs:
 
     - name: Keep artifacts
       if: success() || failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: *artifact
         path: "${{ env.ARTIFACT_ROOT }}"
