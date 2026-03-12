@@ -4,11 +4,13 @@ set -o nounset -o errexit
 
 RUN=${XDG_RUNTIME_DIR-/run/user/$UID}/dot-nvim
 mkdir -p "$RUN"
+
+UMASK=$(umask)
+umask 0077
 TMP=$(mktemp -d -p "$RUN" "run.XXXXX")
-trap 'rm -rf $TMP' EXIT
-chmod 0700 "$TMP"
 
 printenv --null >"$TMP/outer.env"
+umask "$UMASK"
 
 ROOT=$(readlink -f "$0" | xargs dirname)
 
@@ -25,4 +27,4 @@ export XDG_STATE_HOME="$ROOT/state"
 
 export NVIM_PYTHON_LOG_FILE="$XDG_STATE_HOME/$NVIM_APPNAME/python.log"
 
-"$ROOT/root/$NVIM_VERSION/bin/nvim" "$@"
+exec "$ROOT/root/$NVIM_VERSION/bin/nvim" "$@"

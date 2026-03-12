@@ -40,7 +40,22 @@ local function read_env_file(path)
     return es
 end
 
-M.outer = read_env_file(os.getenv("DOT_NVIM_RUNTIME_DIR") .. "/outer.env")
+local runtime_dir = os.getenv("DOT_NVIM_RUNTIME_DIR")
+
+local function consumer_runtime_dir()
+    vim.uv.fs_rmdir(runtime_dir)
+end
+
+local function consume_env_file(path)
+    local es = read_env_file(path)
+    vim.fs.rm(path)
+
+    vim.schedule(consumer_runtime_dir)
+
+    return es
+end
+
+M.outer = consume_env_file(runtime_dir .. "/outer.env")
 
 local function merge_env(inner)
     local env = {}
