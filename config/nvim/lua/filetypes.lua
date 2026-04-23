@@ -51,6 +51,10 @@ vim.api.nvim_create_autocmd("FileType", {
             spellfile = spellfile .. path
         end
         vim.opt_local.spellfile = spellfile
+
+        -- BUG? doc claims that the default directory is created when:
+        -- "a word is added while this option is empty"
+        vim.fn.mkdir(vim.fs.joinpath(vim.fn.stdpath('data'), "site", "spell"), "p")
     end,
 })
 
