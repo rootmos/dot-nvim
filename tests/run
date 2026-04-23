@@ -139,6 +139,7 @@ def main(args, workdir):
         kwargs["timeout"] = args.timeout
 
     cmdline += [ args.target ]
+    logger.debug("cmdline: %s", cmdline)
     p = subprocess.run(cmdline, **kwargs)
 
     with open(result_path) as f:
@@ -174,7 +175,7 @@ def main(args, workdir):
     if len(messages) == 0:
         good.append(f"no messages")
     else:
-        bad.append(f"too noisy")
+        bad.append(f"too noisy: {messages}")
 
     if not args.sanity_check:
         if result:
