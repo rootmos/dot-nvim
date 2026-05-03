@@ -9,6 +9,7 @@ vim.filetype.add {
     extension = {
         sms = "sms",
         chat = "chat",
+        tex = "tex", -- instead of plaintex
     },
 }
 
