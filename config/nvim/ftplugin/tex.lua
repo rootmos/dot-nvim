@@ -12,3 +12,5 @@ local function za(t)
 end
 vim.keymap.set("n", "za", za("draft"), { buffer = true })
 vim.keymap.set("n", "zA", za("final"), { buffer = true })
+
+vim.opt_local.iskeyword:append("+")
