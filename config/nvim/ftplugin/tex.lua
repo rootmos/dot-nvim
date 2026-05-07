@@ -1,5 +1,5 @@
 vim.keymap.set("i", '"', "\\enquote{", { buffer = true })
-vim.keymap.set("i", "*", "\\emph{", { buffer = true })
+vim.keymap.set("i", "**", "\\emph{", { buffer = true })
 
 local function za(t)
     return function()
