@@ -70,7 +70,7 @@ local function configureLspsaga()
         },
     }
 
-    vim.keymap.set("n", "<leader>h", function() require("lspsaga.codeaction"):code_action() end)
+    vim.keymap.set("n", "<leader>H", function() require("lspsaga.codeaction"):code_action() end)
     vim.keymap.set("n", "<leader>T", function() require("lspsaga.symbol"):outline() end)
 end
 

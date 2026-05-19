@@ -74,6 +74,7 @@ return {
             vim.keymap.set("n", "<leader>r", builtin.resume)
             vim.keymap.set("n", "<leader>k", builtin.man_pages)
             vim.keymap.set("n", "<leader>=", builtin.spell_suggest)
+            vim.keymap.set("n", "<leader>h", builtin.help_tags)
 
             vim.keymap.set("n", "<leader>b", function()
                 builtin.buffers {

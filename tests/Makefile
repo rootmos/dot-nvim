@@ -21,6 +21,7 @@ ALL_FILETYPES += gitcommit tex markdown text man
 ALL_FILETYPES += c python haskell lua go sh bash
 ALL_FILETYPES += mail sms chat
 ALL_FILETYPES += tex
+ALL_FILETYPES += help
 
 .PHONY: filetypes
 filetypes: $(foreach ft,$(FILETYPES),test.filetype-$(ft))

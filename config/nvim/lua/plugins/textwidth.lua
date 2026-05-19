@@ -2,7 +2,7 @@ return {
     "lcheylus/overlength.nvim",
     config = function()
         require("overlength").setup({
-            disable_ft = { "gitcommit" },
+            disable_ft = { "gitcommit", "help" },
         })
     end,
 }
