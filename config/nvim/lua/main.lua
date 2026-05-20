@@ -30,7 +30,7 @@ vim.api.nvim_set_keymap("i", "<S-F8>", "<Esc>:wall<CR>:qall<CR>", { noremap = tr
 vim.g.mapleader = ","
 vim.g.maplocalleader = '-'
 
-vim.keymap.set("n", "<leader>z", function() vim.cmd(':%s/\\s\\+$//c') end)
+vim.keymap.set("n", "<leader>z", function() vim.cmd(':%s/\\s\\+$//ce') end)
 
 function resetTabs(t)
     local t = t or 4
