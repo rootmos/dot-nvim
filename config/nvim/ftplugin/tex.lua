@@ -20,13 +20,26 @@ local function itemize()
     local buf, row, col, off = unpack(pos)
     local ls = vim.api.nvim_buf_get_lines(buf, row-1, row, false)
     local l = ls[1]
+    vim.fn.assert_equal(buf, 0)
 
     local _, i = vim.regex([[^\s*]]):match_str(l)
     if not vim.startswith(l:sub(i+1), [[\item]]) then
         vim.cmd([[keeppatterns .s/^\s*/\\item /]])
-        vim.fn.setpos(".", {buf, row, col - i + 6, off})
+        col = col - i + 6
+    else
+        vim.cmd([[keeppatterns .s/^\s*//]])
+        col = col - i
     end
+
+    local i = vim.api.nvim_eval(vim.bo.indentexpr)
+    local indent = ""
+    for _ = 1, i do
+        indent = indent .. " "
+    end
+    vim.cmd("keeppatterns .s/^\\s*/" .. indent .. "/")
+    col = col + i
+
+    vim.fn.setpos(".", {buf, row, col, off})
 end
 
-vim.keymap.set("i", ",i", itemize, { buffer = true })
-vim.keymap.set("n", ",i", itemize, { buffer = true })
+vim.keymap.set({"i", "n"}, ",i", itemize, { buffer = true })
