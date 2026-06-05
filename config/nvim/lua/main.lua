@@ -14,18 +14,18 @@ vim.opt.signcolumn = "number"
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "~" }
 
-vim.api.nvim_set_keymap("i", "hh", "<Esc>", { noremap = true })
-vim.api.nvim_set_keymap("i", "uu", "<Esc>:w<CR>", { noremap = true })
-vim.api.nvim_set_keymap("i", "ii", "<Esc>:wall<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "q", "<NOP>", { noremap = true })
-vim.api.nvim_set_keymap("n", "Q", "<NOP>", { noremap = true })
+vim.keymap.set("i", "hh", "<Esc>", { noremap = true })
+vim.keymap.set("i", "uu", "<Esc>:w<CR>", { noremap = true })
+vim.keymap.set("i", "ii", "<Esc>:wall<CR>", { noremap = true })
+vim.keymap.set("n", "q", "<NOP>", { noremap = true })
+vim.keymap.set("n", "Q", "<NOP>", { noremap = true })
 
-vim.api.nvim_set_keymap("n", "<F8>", ":wall<CR>", { noremap = true })
-vim.api.nvim_set_keymap("i", "<F8>", "<Esc>:wall<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-F8>", ":wall<CR>:qall<CR>", { noremap = true })
-vim.api.nvim_set_keymap("i", "<C-F8>", "<Esc>:wall<CR>:qall<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<S-F8>", ":wall<CR>:qall<CR>", { noremap = true })
-vim.api.nvim_set_keymap("i", "<S-F8>", "<Esc>:wall<CR>:qall<CR>", { noremap = true })
+vim.keymap.set("n", "<F8>", ":wall<CR>", { noremap = true })
+vim.keymap.set("i", "<F8>", "<Esc>:wall<CR>", { noremap = true })
+vim.keymap.set("n", "<C-F8>", ":wall<CR>:qall<CR>", { noremap = true })
+vim.keymap.set("i", "<C-F8>", "<Esc>:wall<CR>:qall<CR>", { noremap = true })
+vim.keymap.set("n", "<S-F8>", ":wall<CR>:qall<CR>", { noremap = true })
+vim.keymap.set("i", "<S-F8>", "<Esc>:wall<CR>:qall<CR>", { noremap = true })
 
 vim.g.mapleader = ","
 vim.g.maplocalleader = '-'

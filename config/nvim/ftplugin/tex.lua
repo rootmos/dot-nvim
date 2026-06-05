@@ -42,4 +42,4 @@ local function itemize()
     vim.fn.setpos(".", {buf, row, col, off})
 end
 
-vim.keymap.set({"i", "n"}, ",i", itemize, { buffer = true })
+vim.keymap.set({"i", "n"}, "<leader>i", itemize, { buffer = true })
