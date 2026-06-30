@@ -72,6 +72,9 @@ local function mkConfig()
         mapping = mkMapping(),
         sources = mkSources(),
         preselect = cmp.PreselectMode.None,
+        sorting = {
+            priority_weight = 100,
+        },
     })
 end
 

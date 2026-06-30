@@ -18,7 +18,7 @@ vim.keymap.set("n", "zA", za("final"), { buffer = true })
 
 vim.opt_local.iskeyword:append("+")
 
-local function itemize()
+local function item()
     local pos = pos or vim.fn.getpos(".")
     local buf, row, col, off = unpack(pos)
     local ls = vim.api.nvim_buf_get_lines(buf, row-1, row, false)
@@ -45,4 +45,21 @@ local function itemize()
     vim.fn.setpos(".", {buf, row, col, off})
 end
 
-vim.keymap.set({"i", "n"}, "<leader>i", itemize, { buffer = true })
+vim.keymap.set({"i", "n"}, "<leader>i", item, { buffer = true })
+
+local ls = require("luasnip")
+
+local function resolve_snippet(name)
+    for _, s in ipairs(ls.get_snippets("tex")) do
+        if s.name == name then
+            return s
+        end
+    end
+end
+
+local function itemize()
+    local s = resolve_snippet("\\itemize")
+    ls.snip_expand(s)
+end
+
+vim.keymap.set({"i", "n"}, ";I", itemize, { buffer = true })
