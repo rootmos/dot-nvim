@@ -44,11 +44,28 @@ local function mkConfig()
         })
     end
 
-    local function mkSources()
-        return cmp.config.sources({
+    local function mkSources(ft)
+        local src = {
             { name = "nvim_lsp" },
             { name = "luasnip" },
-            {
+            { name = "async_path" },
+        }
+
+        if ft == "tex" then
+            table.insert(src, {
+                name = "spell",
+                keyword_length = 3,
+                keyword_pattern = [[\\\?\k\+]],
+                option = {
+                    --keep_all_entries = true,
+                    --enable_in_context = function(params)
+                        --return require("cmp.config.context").in_treesitter_capture('spell')
+                    --end,
+                    --preselect_correct_word = true,
+                },
+            })
+        else
+            table.insert(src, {
                 name = "buffer",
                 option = {
                     get_bufnrs = function()
@@ -58,9 +75,10 @@ local function mkConfig()
                 },
                 indexing_interval = 100,
                 indexing_batch_size = 1000,
-            },
-            { name = "async_path" },
-        })
+            })
+        end
+
+        return cmp.config.sources(src)
     end
 
     cmp.setup({
@@ -76,6 +94,10 @@ local function mkConfig()
             priority_weight = 100,
         },
     })
+
+    cmp.setup.filetype("tex", {
+        sources = mkSources("tex"),
+    })
 end
 
 return {
@@ -87,6 +109,7 @@ return {
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-nvim-lsp",
             "FelipeLema/cmp-async-path",
+            "f3fora/cmp-spell",
         },
         config = mkConfig,
     },
