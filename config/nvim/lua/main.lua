@@ -28,7 +28,7 @@ vim.keymap.set("n", "<S-F8>", ":wall<CR>:qall<CR>", { noremap = true })
 vim.keymap.set("i", "<S-F8>", "<Esc>:wall<CR>:qall<CR>", { noremap = true })
 
 vim.g.mapleader = ","
---vim.g.maplocalleader = "-"
+vim.g.maplocalleader = ";"
 
 vim.keymap.set("n", "<leader>z", function() vim.cmd(':%s/\\s\\+$//ce') end)
 
