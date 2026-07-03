@@ -51,6 +51,18 @@ local function mkConfig()
             { name = "async_path" },
         }
 
+        table.insert(src, {
+            name = "buffer",
+            option = {
+                get_bufnrs = function()
+                    return vim.api.nvim_list_bufs()
+                end,
+                keyword_pattern = [[\k\+]],
+            },
+            indexing_interval = 100,
+            indexing_batch_size = 1000,
+        })
+
         if ft == "tex" then
             table.insert(src, {
                 name = "spell",
@@ -63,18 +75,6 @@ local function mkConfig()
                     --end,
                     --preselect_correct_word = true,
                 },
-            })
-        else
-            table.insert(src, {
-                name = "buffer",
-                option = {
-                    get_bufnrs = function()
-                        return vim.api.nvim_list_bufs()
-                    end,
-                    keyword_pattern = [[\k\+]],
-                },
-                indexing_interval = 100,
-                indexing_batch_size = 1000,
             })
         end
 

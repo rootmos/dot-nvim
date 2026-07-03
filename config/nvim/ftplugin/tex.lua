@@ -62,4 +62,5 @@ local function itemize()
     ls.snip_expand(s)
 end
 
-vim.keymap.set({"i", "n"}, ";I", itemize, { buffer = true })
+vim.keymap.set({"i", "n"}, "<leader>I", itemize, { buffer = true })
+vim.keymap.set({"i", "n"}, "<localleader>I", itemize, { buffer = true })
