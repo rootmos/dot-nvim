@@ -8,7 +8,11 @@ local function za(t)
     return function()
         local fn = vim.fn.expand("%")
         if fn:match("%.tex$") ~= nil then
-            local path = fn:sub(1,-4) .. t .. ".pdf"
+            local name = fn:sub(1,-5)
+            local path = string.format("%s.%s.pdf", name, t)
+            if not vim.uv.fs_stat(path) then
+                path = string.format("%s.pdf", name)
+            end
             vim.system({ "za", path }, { detached = true })
         end
     end

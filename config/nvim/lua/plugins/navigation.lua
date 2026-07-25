@@ -69,6 +69,7 @@ return {
             vim.keymap.set("n", "<leader>f", builtin.find_files)
             vim.keymap.set("n", "<leader>g", builtin.live_grep)
             vim.keymap.set("n", "<leader>G", builtin.grep_string)
+            vim.keymap.set("n", "<localleader>G", builtin.grep_string)
             vim.keymap.set("n", "<leader>j", builtin.jumplist)
             vim.keymap.set("n", "<leader>s", builtin.git_status)
             vim.keymap.set("n", "<leader>r", builtin.resume)
