@@ -16,6 +16,7 @@ jobs:
       image: ${{ matrix.distro }}:latest
     env:
       ARTIFACT_ROOT: /tmp/tests
+      DOT_NVIM_DISABLE_CGROUP: 1
     steps:
     # https://stackoverflow.com/a/60942437
     - name: Get current date

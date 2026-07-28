@@ -27,4 +27,16 @@ export XDG_STATE_HOME="$ROOT/state"
 
 export NVIM_PYTHON_LOG_FILE="$XDG_STATE_HOME/$NVIM_APPNAME/python.log"
 
-exec "$ROOT/root/$NVIM_VERSION/bin/nvim" "$@"
+EXE="$ROOT/root/$NVIM_VERSION/bin/nvim"
+
+if command -v systemd-run &>/dev/null && [[ -z ${DOT_NVIM_DISABLE_CGROUP-} ]]; then
+    MiB=${DOT_NVIM_MEMORY-250}
+    MAX=$((MiB*1024))
+    HIGH=$((MAX*80/100))
+    UNIT="nvim-$(tr -cd 'a-zA-Z0-9' </dev/urandom | head -c3)"
+    exec systemd-run --user --scope --unit="$UNIT" --quiet \
+        -p MemoryHigh="${HIGH}K" -p MemoryMax="${MAX}K" \
+        -- "$EXE" "$@"
+else
+    exec "$EXE" "$@"
+fi
