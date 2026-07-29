@@ -196,11 +196,7 @@ function M.paste(o)
     o = o or {}
     local text = vim.fn.getreg(M.reg)
     if text ~= "" then
-        local pos = pos or vim.fn.getpos(".")
-        vim.api.nvim_paste(text, false, -1)
-        if o.before then
-            vim.fn.setpos(pos)
-        end
+        vim.api.nvim_put({text}, "", not o.before, true)
     end
 end
 
