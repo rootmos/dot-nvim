@@ -48,13 +48,20 @@ require("filetypes")
 require("K")
 require("providers")
 
+function map_leader(mode, key, f)
+    vim.keymap.set(mode, "<leader>" + key, f)
+    if key:match("^%u") then
+        vim.keymap.set(mode, "<localleader>" + key, f)
+    end
+end
+
 do
     local clipboard = require("clipboard")
-    vim.keymap.set("n", "<leader>y", function() clipboard.yank(1) end)
-    vim.keymap.set("n", "<leader>Y", function() clipboard.yank(2) end)
-    vim.keymap.set("v", "<leader>y", '"' .. clipboard.reg .. 'y') -- TODO what's the lua equivalent?
-    vim.keymap.set({"n", "i"}, "<leader>p", function() clipboard.paste {} end)
-    vim.keymap.set({"n", "i"}, "<leader>P", function() clipboard.paste { before = true } end)
+    map_leader("n", "y", function() clipboard.yank(1) end)
+    map_leader("n", "Y", function() clipboard.yank(2) end)
+    map_leader("v", "y", '"' .. clipboard.reg .. 'y') -- TODO what's the lua equivalent?
+    map_leader({"n", "i"}, "p", function() clipboard.paste {} end)
+    map_leader({"n", "i"}, "P", function() clipboard.paste { before = true } end)
 end
 
 -- https://stackoverflow.com/a/19620009
