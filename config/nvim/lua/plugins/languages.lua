@@ -51,7 +51,7 @@ add("python", {
         "stsewd/isort.nvim",
         build = ":UpdateRemotePlugins",
         config = function()
-            vim.keymap.set("n", "<leader>i", vim.cmd["Isort"])
+            map_leader("n", "i", vim.cmd["Isort"])
         end,
     }
 })

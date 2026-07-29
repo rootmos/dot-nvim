@@ -30,7 +30,14 @@ vim.keymap.set("i", "<S-F8>", "<Esc>:wall<CR>:qall<CR>", { noremap = true })
 vim.g.mapleader = ","
 vim.g.maplocalleader = ";"
 
-vim.keymap.set("n", "<leader>z", function() vim.cmd(':%s/\\s\\+$//ce') end)
+function map_leader(mode, key, f, opts)
+    vim.keymap.set(mode, "<leader>" .. key, f, opts)
+    if key:match("^%u") then
+        vim.keymap.set(mode, "<localleader>" .. key, f, opts)
+    end
+end
+
+map_leader("n", "z", function() vim.cmd(':%s/\\s\\+$//ce') end)
 
 function resetTabs(t)
     local t = t or 4
@@ -47,13 +54,6 @@ require("config.lazy")
 require("filetypes")
 require("K")
 require("providers")
-
-function map_leader(mode, key, f)
-    vim.keymap.set(mode, "<leader>" + key, f)
-    if key:match("^%u") then
-        vim.keymap.set(mode, "<localleader>" + key, f)
-    end
-end
 
 do
     local clipboard = require("clipboard")

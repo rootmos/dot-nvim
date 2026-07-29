@@ -1,4 +1,4 @@
-toggleDiagnostics = (function(initial)
+local toggleDiagnostics = (function(initial)
     local toggle = initial or (vim.diagnostic.is_enabled() and 1 or 0)
 
     function f()
@@ -55,8 +55,8 @@ local function mkConfig()
         end
     })
 
-    vim.keymap.set("n", "<leader>D", function() vim.lsp.buf.definition() end)
-    vim.keymap.set("n", "<leader>d", function() toggleDiagnostics() end)
+    map_leader("n", "D", function() vim.lsp.buf.definition() end)
+    map_leader("n", "d", function() toggleDiagnostics() end)
 end
 
 local function configureLspsaga()
@@ -70,8 +70,8 @@ local function configureLspsaga()
         },
     }
 
-    vim.keymap.set("n", "<leader>H", function() require("lspsaga.codeaction"):code_action() end)
-    vim.keymap.set("n", "<leader>T", function() require("lspsaga.symbol"):outline() end)
+    map_leader("n", "H", function() require("lspsaga.codeaction"):code_action() end)
+    map_leader("n", "T", function() require("lspsaga.symbol"):outline() end)
 end
 
 return {

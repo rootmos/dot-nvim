@@ -1,5 +1,5 @@
 local chmodxed = nil
-vim.keymap.set("n", "<leader>x", function()
+map_leader("n", "x", function()
     local st = not chmodxed
 
     if vim.system {

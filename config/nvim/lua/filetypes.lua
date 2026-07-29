@@ -20,7 +20,7 @@ vim.api.nvim_create_autocmd("BufNewFile", {
     end,
 })
 
-vim.keymap.set("n", "<leader>R", function() vim.api.nvim_command(":filetype detect") end)
+map_leader("n", "R", function() vim.api.nvim_command(":filetype detect") end)
 
 vim.api.nvim_create_autocmd("FileType", {
     pattern = {

@@ -28,4 +28,4 @@ function toggleLongLines(init)
     end
 end
 toggleLongLines(true)
-vim.keymap.set("n", "<leader>l", toggleLongLines)
+map_leader("n", "l", toggleLongLines)

@@ -49,7 +49,7 @@ local function item()
     vim.fn.setpos(".", {buf, row, col, off})
 end
 
-vim.keymap.set({"i", "n"}, "<leader>i", item, { buffer = true })
+map_leader({"i", "n"}, "i", item, { buffer = true })
 
 local ls = require("luasnip")
 
@@ -66,5 +66,5 @@ local function itemize()
     ls.snip_expand(s)
 end
 
-vim.keymap.set({"i", "n"}, "<leader>I", itemize, { buffer = true })
+map_leader({"i", "n"}, "I", itemize, { buffer = true })
 vim.keymap.set({"i", "n"}, "<localleader>I", itemize, { buffer = true })

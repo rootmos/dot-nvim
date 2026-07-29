@@ -16,15 +16,15 @@ return {
                 --},
             --}
 
-            --vim.keymap.set("n", "<leader>f", fzf.files)
-            --vim.keymap.set("n", "<leader>t", fzf.git_files)
-            --vim.keymap.set("n", "<leader>s", fzf.git_status)
-            --vim.keymap.set("n", "<leader>k", fzf.manpages)
-            --vim.keymap.set("n", "<leader>b", fzf.buffers)
-            --vim.keymap.set("n", "<leader>j", fzf.jumps)
-            --vim.keymap.set("n", "<leader>r", fzf.resume)
+            --map_leader("n", "f", fzf.files)
+            --map_leader("n", "t", fzf.git_files)
+            --map_leader("n", "s", fzf.git_status)
+            --map_leader("n", "k", fzf.manpages)
+            --map_leader("n", "b", fzf.buffers)
+            --map_leader("n", "j", fzf.jumps)
+            --map_leader("n", "r", fzf.resume)
 
-            --vim.keymap.set("n", "<leader>g", function()
+            --map_leader("n", "g", function()
                 --local cwd = vim.fn.getcwd()
                 --local sp = { cwd }
 
@@ -65,19 +65,18 @@ return {
                 },
             }
 
-            vim.keymap.set("n", "<leader>t", builtin.git_files)
-            vim.keymap.set("n", "<leader>f", builtin.find_files)
-            vim.keymap.set("n", "<leader>g", builtin.live_grep)
-            vim.keymap.set("n", "<leader>G", builtin.grep_string)
-            vim.keymap.set("n", "<localleader>G", builtin.grep_string)
-            vim.keymap.set("n", "<leader>j", builtin.jumplist)
-            vim.keymap.set("n", "<leader>s", builtin.git_status)
-            vim.keymap.set("n", "<leader>r", builtin.resume)
-            vim.keymap.set("n", "<leader>k", builtin.man_pages)
-            vim.keymap.set("n", "<leader>=", builtin.spell_suggest)
-            vim.keymap.set("n", "<leader>h", builtin.help_tags)
+            map_leader("n", "t", builtin.git_files)
+            map_leader("n", "f", builtin.find_files)
+            map_leader("n", "g", builtin.live_grep)
+            map_leader("n", "G", builtin.grep_string)
+            map_leader("n", "j", builtin.jumplist)
+            map_leader("n", "s", builtin.git_status)
+            map_leader("n", "r", builtin.resume)
+            map_leader("n", "k", builtin.man_pages)
+            map_leader("n", "=", builtin.spell_suggest)
+            map_leader("n", "h", builtin.help_tags)
 
-            vim.keymap.set("n", "<leader>b", function()
+            map_leader("n", "b", function()
                 builtin.buffers {
                     ignore_current_buffer = true,
                     sort_lastused = true,
