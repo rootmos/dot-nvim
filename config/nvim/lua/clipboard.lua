@@ -192,11 +192,22 @@ function M.yank(mode)
     end
 end
 
+-- http://lua-users.org/wiki/SplitJoin
+local function lines(s)
+   local ls = {}
+   local function k(l)
+      table.insert(ls, l)
+      return ""
+   end
+   k(s:gsub("(.-)\r?\n", k))
+   return ls
+end
+
 function M.paste(o)
     o = o or {}
     local text = vim.fn.getreg(M.reg)
     if text ~= "" then
-        vim.api.nvim_put({text}, "", not o.before, true)
+        vim.api.nvim_put(lines(text), "", not o.before, true)
     end
 end
 
