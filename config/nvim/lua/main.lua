@@ -54,7 +54,6 @@ require("config.lazy")
 require("filetypes")
 require("K")
 require("providers")
-require("randomizer")
 
 do
     local clipboard = require("clipboard")
@@ -63,6 +62,11 @@ do
     map_leader("v", "y", '"' .. clipboard.reg .. 'y') -- TODO what's the lua equivalent?
     map_leader({"n", "i"}, "p", function() clipboard.paste {} end)
     map_leader({"n", "i"}, "P", function() clipboard.paste { before = true } end)
+end
+
+do
+    local R = require("randomizer")
+    vim.keymap.set({"n", "v"}, "zz", R.line)
 end
 
 -- https://stackoverflow.com/a/19620009
