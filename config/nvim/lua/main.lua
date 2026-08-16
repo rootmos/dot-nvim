@@ -54,6 +54,7 @@ require("config.lazy")
 require("filetypes")
 require("K")
 require("providers")
+require("randomizer")
 
 do
     local clipboard = require("clipboard")
