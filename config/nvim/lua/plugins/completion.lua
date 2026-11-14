@@ -63,7 +63,7 @@ local function mkConfig()
             indexing_batch_size = 1000,
         })
 
-        if ft == "tex" then
+        if false and ft == "tex" then
             table.insert(src, {
                 name = "spell",
                 keyword_length = 3,
