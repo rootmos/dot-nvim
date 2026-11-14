@@ -1,6 +1,7 @@
 -- TODO use iabbrev instead? vim.api.nvim_cmd({ cmd = "iabbrev", args = {"...", "\\textelp{}"}}, {})
 vim.keymap.set("i", '""', "\\q{", { buffer = true })
 vim.keymap.set("i", "''", "\\qo{", { buffer = true })
+vim.keymap.set("i", "``", "\\qi{", { buffer = true })
 vim.keymap.set("i", "**", "\\emph{", { buffer = true })
 vim.keymap.set("i", "__", "\\textbf{", { buffer = true })
 vim.keymap.set("i", ",,,", "\\textelp{}", { buffer = true })
